@@ -1,4 +1,4 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Modal, Notice, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -30,9 +30,28 @@ export default class MyPlugin extends Plugin {
 			// },
 			checkCallback: (checking: boolean) => {
 				let leaf = this.app.workspace.activeLeaf;
+				// console.log(leaf);
 				if (leaf) {
 					if (!checking) {
 						new SampleModal(this.app).open();
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
+		this.addCommand({
+			id: 'napoleon-test',
+			name: 'Test',
+			checkCallback: (checking: boolean) => {
+				
+				let leaf = this.app.workspace.activeLeaf;
+				// console.log(leaf);
+				if (leaf) {
+					if (!checking) {
+						// new SampleModal(this.app).open();
+						app.workspace.activeLeaf.view.editor.insertText("xxx\n");
 					}
 					return true;
 				}
