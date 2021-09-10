@@ -3,6 +3,8 @@ import descriptor2 from './data/descriptor2.json';
 import fateActions from './data/fateActions.json';
 import fateSubjects from './data/fateSubjects.json';
 
+// TODO: Rename this something better or split apart
+
 
 const descriptor = () => {
 
