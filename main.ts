@@ -1,4 +1,5 @@
-import { App, Modal, Notice, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Modal, Notice, MarkdownView, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import {roller, descriptor, actionSubject} from './src/index.js'
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -30,6 +31,7 @@ export default class MyPlugin extends Plugin {
 			// },
 			checkCallback: (checking: boolean) => {
 				let leaf = this.app.workspace.activeLeaf;
+
 				// console.log(leaf);
 				if (leaf) {
 					if (!checking) {
@@ -42,16 +44,23 @@ export default class MyPlugin extends Plugin {
 		});
 
 		this.addCommand({
-			id: 'napoleon-test',
-			name: 'Test',
+			id: 'solo-test',
+			name: 'Mythic:Test',
 			checkCallback: (checking: boolean) => {
+
 				
 				let leaf = this.app.workspace.activeLeaf;
-				// console.log(leaf);
+				
 				if (leaf) {
 					if (!checking) {
 						// new SampleModal(this.app).open();
-						app.workspace.activeLeaf.view.editor.insertText("xxx\n");
+						this.app.workspace.activeLeaf.view.editor.insertText(`${roller().text}\n\n`);
+						this.app.workspace.activeLeaf.view.editor.insertText(`${descriptor().text}\n`);
+						this.app.workspace.activeLeaf.view.editor.insertText(`${actionSubject().text}\n`);
+
+						// const mdfiles = this.app.vault.getMarkdownFiles();
+						// const mdfiles = cache.tags;
+						// console.log(mdfiles)
 					}
 					return true;
 				}

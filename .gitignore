@@ -12,3 +12,6 @@ main.js
 
 # obsidian
 data.json
+
+# data from oracles etc
+src/mythic/data
