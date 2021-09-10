@@ -1,4 +1,4 @@
-import { App, Modal, Notice, MarkdownView, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, ButtonComponent, Modal, Notice, MarkdownView, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import {roller, descriptor, actionSubject} from './src/index.js'
 
 interface MyPluginSettings {
@@ -46,6 +46,12 @@ export default class MyPlugin extends Plugin {
 		this.addCommand({
 			id: 'solo-test',
 			name: 'Mythic:Test',
+			hotkeys: [
+		        {
+		          modifiers: ['Mod', 'Shift'],
+		          key: 's',
+		        },
+		      ],
 			checkCallback: (checking: boolean) => {
 
 				
@@ -54,9 +60,11 @@ export default class MyPlugin extends Plugin {
 				if (leaf) {
 					if (!checking) {
 						// new SampleModal(this.app).open();
-						this.app.workspace.activeLeaf.view.editor.insertText(`${roller().text}\n\n`);
-						this.app.workspace.activeLeaf.view.editor.insertText(`${descriptor().text}\n`);
-						this.app.workspace.activeLeaf.view.editor.insertText(`${actionSubject().text}\n`);
+						this.app.workspace.activeLeaf.view.editor.insertText(
+							`${roller().text}\n${descriptor().text}\n${actionSubject().text}`
+						);
+						
+						
 
 						// const mdfiles = this.app.vault.getMarkdownFiles();
 						// const mdfiles = cache.tags;
@@ -94,13 +102,31 @@ export default class MyPlugin extends Plugin {
 	}
 }
 
+class SoloModal extends Modal {
+	constructor(app: App) {
+		super(app);
+	}
+
+	onOpen() {
+		let {contentEl, titleEl} = this;
+		titleEl.setText('Solo Tools');
+		contentEl.setText('Woah!');
+	}
+
+	onClose() {
+		let {contentEl} = this;
+		contentEl.empty();
+	}
+}
+
 class SampleModal extends Modal {
 	constructor(app: App) {
 		super(app);
 	}
 
 	onOpen() {
-		let {contentEl} = this;
+		let {contentEl, titleEl} = this;
+		titleEl.setText('Woah!');
 		contentEl.setText('Woah!');
 	}
 

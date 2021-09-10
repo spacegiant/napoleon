@@ -15,7 +15,7 @@ const descriptor = () => {
 	const d2 = descriptor2.descriptors[roll2];
 
 	return {
-		text: `Descriptors: ${d1} ${d2}\n`
+		text: `Descriptors: ${d1} ${d2}`
 	}
 }
 
@@ -28,7 +28,7 @@ const actionSubject = () => {
 	const d2 = fateSubjects.subjects[roll2];
 
 	return {
-		text: `ActionSubject: ${d1} ${d2}\n`
+		text: `ActionSubject: ${d1} ${d2}`
 	}
 }
 
