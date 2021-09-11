@@ -70,7 +70,9 @@ export default class MyPlugin extends Plugin {
 						}
 						const metadataCache = this.app.metadataCache;
 						const taggedFiles = getTaggedFiles(this.app);
-						// console.log(taggedFiles.randomTables[0]);
+						console.log(taggedFiles.randomTables[0]);
+
+						const myFile = taggedFiles.randomTables[0];
 					}
 					return true;
 				}
