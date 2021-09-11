@@ -13,7 +13,7 @@ export default function getTaggedFiles(app: App) {
     for (const markdownFile of markdownFiles) {
         const cachedMetadata = metadataCache.getFileCache(markdownFile);
 
-        console.log("!!! ", markdownFile, cachedMetadata)
+        // console.log("!!! ", markdownFile, cachedMetadata)
 
         if (!cachedMetadata) return;
 

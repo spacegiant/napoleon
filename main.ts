@@ -56,9 +56,12 @@ export default class MyPlugin extends Plugin {
 				if (leaf) {
 					if (!checking) {
 
+						const mode = leaf.getViewState().state.mode;
+						const isEditing = mode === "source";
+
 						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 
-						if (view) {
+						if (isEditing && view) {
 							const editor = view.editor;
 							const doc = editor.getDoc();
 							const cursor = doc.getCursor();
@@ -66,38 +69,9 @@ export default class MyPlugin extends Plugin {
 							doc.replaceRange(string, cursor);
 						}
 						const metadataCache = this.app.metadataCache;
-
-					
-
-
-						// This is used to get the current page tags
-						const currentPage = metadataCache.getFileCache(this.app.workspace.getActiveFile());
-					
-						// console.log("ACTIVE LEAF = ", currentPage);
-
-
-
-
-
-						
-
-						const tagges = getCachedTags(currentPage);
-						console.log(tagges)
-
-
-
-
-
-						
-
 						const taggedFiles = getTaggedFiles(this.app);
-						
-
-						console.log(taggedFiles.randomTables[0])
-
+						// console.log(taggedFiles.randomTables[0]);
 					}
-
-					
 					return true;
 				}
 				return false;
