@@ -1,5 +1,6 @@
-import { App, ButtonComponent, Modal, Notice, MarkdownView, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { getAllTags, MetadataCache, App, ButtonComponent, Modal, Notice, MarkdownSourceView, MarkdownView, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import {roller, descriptor, actionSubject} from './src/index.js'
+import { FilterMDFilesByTags } from './src/utils/findByTag'
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -53,16 +54,29 @@ export default class MyPlugin extends Plugin {
 		        },
 		      ],
 			checkCallback: (checking: boolean) => {
-
+				
 				
 				let leaf = this.app.workspace.activeLeaf;
+
+				// HERE //////////////////////////
+				const myCache = new MetadataCache();
+				// FilterMDFilesByTags(this, myCache.getCache());
+
+				
 				
 				if (leaf) {
 					if (!checking) {
 						// new SampleModal(this.app).open();
-						this.app.workspace.activeLeaf.view.editor.insertText(
-							`${roller().text}\n${descriptor().text}\n${actionSubject().text}`
-						);
+						
+						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+						if (view) {
+							const editor = view.editor;
+							const doc = editor.getDoc();
+							const cursor = doc.getCursor();
+							const string = "\n" + `${roller(10,13).text}\n${descriptor().text}\n${actionSubject().text}` + "\n\n";
+							doc.replaceRange(string, cursor);
+						}
 						
 						
 

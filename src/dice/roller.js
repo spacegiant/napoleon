@@ -10,7 +10,7 @@ export const roller = (max = 1, diceType = 6) => {
 	return {
 		max,
 		diceType,
-		text: `Roll: 1d${diceType} = ${results}`
+		results,
+		text: `Roll: ${max}d${diceType} = ${results}`
 	}
-	
 }
