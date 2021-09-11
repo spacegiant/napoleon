@@ -1,6 +1,8 @@
 import { getAllTags, MetadataCache, App, ButtonComponent, Modal, Notice, MarkdownSourceView, MarkdownView, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import {roller, descriptor, actionSubject} from './src/index.js'
+import { roller, descriptor, actionSubject } from './src/index.js'
 import { FilterMDFilesByTags } from './src/utils/findByTag'
+import getCachedTags from './src/utils/getCachedTags';
+import getTaggedFiles from './src/utils/getTaggedFiles';
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -27,13 +29,9 @@ export default class MyPlugin extends Plugin {
 		this.addCommand({
 			id: 'open-sample-modal',
 			name: 'Open Sample Modal',
-			// callback: () => {
-			// 	console.log('Simple Callback');
-			// },
 			checkCallback: (checking: boolean) => {
 				let leaf = this.app.workspace.activeLeaf;
 
-				// console.log(leaf);
 				if (leaf) {
 					if (!checking) {
 						new SampleModal(this.app).open();
@@ -48,42 +46,58 @@ export default class MyPlugin extends Plugin {
 			id: 'solo-test',
 			name: 'Mythic:Test',
 			hotkeys: [
-		        {
-		          modifiers: ['Mod', 'Shift'],
-		          key: 's',
-		        },
-		      ],
+				{
+					modifiers: ['Mod', 'Shift'],
+					key: 's',
+				},
+			],
 			checkCallback: (checking: boolean) => {
-				
-				
 				let leaf = this.app.workspace.activeLeaf;
-
-				// HERE //////////////////////////
-				const myCache = new MetadataCache();
-				// FilterMDFilesByTags(this, myCache.getCache());
-
-				
-				
 				if (leaf) {
 					if (!checking) {
-						// new SampleModal(this.app).open();
-						
+
 						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 
 						if (view) {
 							const editor = view.editor;
 							const doc = editor.getDoc();
 							const cursor = doc.getCursor();
-							const string = "\n" + `${roller(10,13).text}\n${descriptor().text}\n${actionSubject().text}` + "\n\n";
+							const string = "\n" + `${roller(10, 13).text}\n${descriptor().text}\n${actionSubject().text}` + "\n\n";
 							doc.replaceRange(string, cursor);
 						}
-						
+						const metadataCache = this.app.metadataCache;
+
+					
+
+
+						// This is used to get the current page tags
+						const currentPage = metadataCache.getFileCache(this.app.workspace.getActiveFile());
+					
+						// console.log("ACTIVE LEAF = ", currentPage);
+
+
+
+
+
 						
 
-						// const mdfiles = this.app.vault.getMarkdownFiles();
-						// const mdfiles = cache.tags;
-						// console.log(mdfiles)
+						const tagges = getCachedTags(currentPage);
+						console.log(tagges)
+
+
+
+
+
+						
+
+						const taggedFiles = getTaggedFiles(this.app);
+						
+
+						console.log(taggedFiles.randomTables[0])
+
 					}
+
+					
 					return true;
 				}
 				return false;
@@ -122,13 +136,13 @@ class SoloModal extends Modal {
 	}
 
 	onOpen() {
-		let {contentEl, titleEl} = this;
+		let { contentEl, titleEl } = this;
 		titleEl.setText('Solo Tools');
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		let {contentEl} = this;
+		let { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -139,13 +153,13 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		let {contentEl, titleEl} = this;
+		let { contentEl, titleEl } = this;
 		titleEl.setText('Woah!');
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		let {contentEl} = this;
+		let { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -159,11 +173,11 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		let {containerEl} = this;
+		let { containerEl } = this;
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
+		containerEl.createEl('h2', { text: 'Settings for my awesome plugin.' });
 
 		new Setting(containerEl)
 			.setName('Setting #1')
