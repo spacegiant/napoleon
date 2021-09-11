@@ -1,9 +1,19 @@
 import {App} from 'obsidian';
 
 
-const getContent = (app: App, filename: string, filepath: string, cb: (value: string) => void) => {
-    const path = app.metadataCache.getFirstLinkpathDest(filename, filepath);
-    const content = app.vault.cachedRead(path).then((value) => cb(value)).catch(error => console.log(error));
+const getContent = (app: App, file: any, cb: (value: string) => void) => {
+    const offset = file.frontmatter.position.end.offset;
+    const path = app.metadataCache.getFirstLinkpathDest(file.name, file.path);
+    return app.vault.cachedRead(path).then((value) => {
+        const sourceText = value.substring(offset).trim();
+        const items = sourceText.split(/\r?\n/);
+        const prefix = file.frontmatter.label || "Random";
+
+        console.log(items)
+        const roll = Math.floor(Math.random() * items.length )
+        const text = `${prefix}: ${items[roll]}`;
+        return cb(text);
+    }).catch(error => console.log(error));
 }
 
 export default getContent;

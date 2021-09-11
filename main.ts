@@ -1,8 +1,6 @@
-import { getAllTags, MetadataCache, App, ButtonComponent, Modal, Notice, MarkdownSourceView, MarkdownView, Editor, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { roller, descriptor, actionSubject } from './src/index.js'
-import { FilterMDFilesByTags } from './src/utils/findByTag'
-import getCachedTags from './src/utils/getCachedTags';
+import { App, Modal, Notice, MarkdownView, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import getTaggedFiles from './src/utils/getTaggedFiles';
+import getContent from './src/utils/getContent';
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -20,6 +18,43 @@ export default class MyPlugin extends Plugin {
 
 		await this.loadSettings();
 
+		let taggedFiles;
+
+		this.app.workspace.onLayoutReady(() => {
+			taggedFiles = getTaggedFiles(this.app);
+
+			taggedFiles.simpleList.forEach((table: any, index) => {
+				this.addCommand({
+					id: `command-${index}`,
+					name: table?.basename,
+					checkCallback: (checking: boolean) => {
+						let leaf = this.app.workspace.activeLeaf;
+						if (leaf) {
+							if (!checking) {
+								const mode = leaf.getViewState().state.mode;
+								const isEditing = mode === "source";
+		
+								const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+		
+								if (isEditing && view) {
+									const editor = view.editor;
+									const doc = editor.getDoc();
+									const cursor = doc.getCursor();
+									// const string = "\n" + `${roller(10, 13).text}\n${descriptor().text}\n${actionSubject().text}` + "\n\n";
+									getContent(this.app, table, (content: string) => {
+										const string = "\n" + content + "\n\n"
+										doc.replaceRange(string, cursor);
+									})
+								}
+							}
+							return true;
+						}
+						return false;
+					}
+				})
+			})
+		});
+
 		this.addRibbonIcon('dice', 'Sample Plugin', () => {
 			new Notice('This is a notice!');
 		});
@@ -35,44 +70,6 @@ export default class MyPlugin extends Plugin {
 				if (leaf) {
 					if (!checking) {
 						new SampleModal(this.app).open();
-					}
-					return true;
-				}
-				return false;
-			}
-		});
-
-		this.addCommand({
-			id: 'solo-test',
-			name: 'Mythic:Test',
-			hotkeys: [
-				{
-					modifiers: ['Mod', 'Shift'],
-					key: 's',
-				},
-			],
-			checkCallback: (checking: boolean) => {
-				let leaf = this.app.workspace.activeLeaf;
-				if (leaf) {
-					if (!checking) {
-
-						const mode = leaf.getViewState().state.mode;
-						const isEditing = mode === "source";
-
-						const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-
-						if (isEditing && view) {
-							const editor = view.editor;
-							const doc = editor.getDoc();
-							const cursor = doc.getCursor();
-							const string = "\n" + `${roller(10, 13).text}\n${descriptor().text}\n${actionSubject().text}` + "\n\n";
-							doc.replaceRange(string, cursor);
-						}
-						const metadataCache = this.app.metadataCache;
-						const taggedFiles = getTaggedFiles(this.app);
-						console.log(taggedFiles.randomTables[0]);
-
-						const myFile = taggedFiles.randomTables[0];
 					}
 					return true;
 				}
