@@ -61,21 +61,21 @@ export default class MyPlugin extends Plugin {
 
 		this.addStatusBarItem().setText('Status Bar Text');
 
-		this.addCommand({
-			id: 'open-sample-modal',
-			name: 'Open Sample Modal',
-			checkCallback: (checking: boolean) => {
-				let leaf = this.app.workspace.activeLeaf;
+		// this.addCommand({
+		// 	id: 'open-sample-modal',
+		// 	name: 'Open Sample Modal',
+		// 	checkCallback: (checking: boolean) => {
+		// 		let leaf = this.app.workspace.activeLeaf;
 
-				if (leaf) {
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-					return true;
-				}
-				return false;
-			}
-		});
+		// 		if (leaf) {
+		// 			if (!checking) {
+		// 				new SampleModal(this.app).open();
+		// 			}
+		// 			return true;
+		// 		}
+		// 		return false;
+		// 	}
+		// });
 
 		this.addSettingTab(new SampleSettingTab(this.app, this));
 
@@ -83,11 +83,11 @@ export default class MyPlugin extends Plugin {
 			console.log('codemirror', cm);
 		});
 
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
+		// this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
+		// 	console.log('click', evt);
+		// });
 
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+		// this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
 	onunload() {
