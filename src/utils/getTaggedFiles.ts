@@ -1,6 +1,6 @@
 import { App } from 'obsidian';
 
-export default function getTaggedFiles(app: App) {
+function getTaggedFiles(app: App) {
     const metadataCache = app.metadataCache;
     const markdownFiles = app.vault.getMarkdownFiles();
     const simpleList: {}[] = [];
@@ -13,13 +13,13 @@ export default function getTaggedFiles(app: App) {
 
         if (!cachedMetadata) return;
 
-        if (cachedMetadata.frontmatter?.tags.includes('solo/list')) {           
+        if (cachedMetadata.frontmatter?.tags?.includes('solo/list')) {           
             simpleList.push(Object.assign({}, markdownFile, cachedMetadata))
-        } else if (cachedMetadata.frontmatter?.tags.includes('solo/double')) {           
+        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/double')) {           
             doubleTables.push(Object.assign({}, markdownFile, cachedMetadata));
-        } else if (cachedMetadata.frontmatter?.tags.includes('solo/weighted')) {
+        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/weighted')) {
             weightedTables.push(Object.assign({}, markdownFile, cachedMetadata));
-        } else if (cachedMetadata.frontmatter?.tags.includes('solo/config')) {
+        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/config')) {
             config.push(markdownFile)
         }
     }
@@ -31,3 +31,5 @@ export default function getTaggedFiles(app: App) {
         config
     };
 }
+
+export default getTaggedFiles;
