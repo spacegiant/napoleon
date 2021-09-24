@@ -7,11 +7,11 @@ const getContent = (app: App, file: any, cb: (value: string) => void) => {
     return app.vault.cachedRead(path).then((value) => {
         const sourceText = value.substring(offset).trim();
         const items = sourceText.split(/\r?\n/);
-        const prefix = file.frontmatter.label || "Random";
+        const prefix = file.frontmatter.label ? file.frontmatter.label + " " : "";
 
         console.log(items)
         const roll = Math.floor(Math.random() * items.length )
-        const text = `${prefix}: ${items[roll]}`;
+        const text = `${prefix}${items[roll]}`;
         return cb(text);
     }).catch(error => console.log(error));
 }

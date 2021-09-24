@@ -42,7 +42,7 @@ export default class MyPlugin extends Plugin {
 									const cursor = doc.getCursor();
 									// const string = "\n" + `${roller(10, 13).text}\n${descriptor().text}\n${actionSubject().text}` + "\n\n";
 									getContent(this.app, table, (content: string) => {
-										const string = "\n" + content + "\n\n"
+										const string = content;
 										doc.replaceRange(string, cursor);
 									})
 								}
