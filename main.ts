@@ -1,6 +1,7 @@
 import { App, Modal, Notice, MarkdownView, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import getTaggedFiles from './src/utils/getTaggedFiles';
 import getContent from './src/utils/getContent';
+import initReplacer from './src/replacer';
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -33,9 +34,9 @@ export default class MyPlugin extends Plugin {
 							if (!checking) {
 								const mode = leaf.getViewState().state.mode;
 								const isEditing = mode === "source";
-		
+
 								const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-		
+
 								if (isEditing && view) {
 									const editor = view.editor;
 									const doc = editor.getDoc();
@@ -82,6 +83,11 @@ export default class MyPlugin extends Plugin {
 		this.registerCodeMirror((cm: CodeMirror.Editor) => {
 			console.log('codemirror', cm);
 		});
+
+		initReplacer(document, this.app.workspace)
+
+		
+
 
 		// this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
 		// 	console.log('click', evt);
