@@ -15,3 +15,6 @@ data.json
 
 # data from oracles etc
 src/mythic/data
+
+# and
+.DS_Store
