@@ -22,9 +22,10 @@ export default (doc: Document, app: any) => {
             const cleanedLine = currentLine.replace(/\s+/g, ' ').trim();
             const stringList = cleanedLine.split(" ");
             const lastString = stringList[stringList.length - 1];
+            console.log(lastString)
             const roll = new DiceRoll(lastString);
             stringList[stringList.length - 1] = roll.output;
-            editor.setLine(lineNo, stringList.join());
+            editor.setLine(lineNo, stringList.join(' '));
         }
     });
 }
