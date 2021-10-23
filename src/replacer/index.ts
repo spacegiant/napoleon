@@ -1,28 +1,31 @@
-import { Workspace, MarkdownView } from 'obsidian';
+import { Workspace, MarkdownView, App, ItemView } from 'obsidian';
+// https://github.com/GreenImp/rpg-dice-roller
+import { DiceRoll } from 'rpg-dice-roller';
 
-// https://regex101.com/r/4hVg8q/1
-const re = /(\d*)(D\d*)((?:[+*-](?:\d+|\([A-Z]*\)))*)(?:\+(D\d*))?/gi;
+export default (doc: Document, app: any) => {
+    // const settings = app.plugins.plugins["obsidian-solo-plugin"].settings;
+    // console.log(">>>", settings.replacer);
 
-export default (doc: Document, workspace: Workspace) => {
-    init: doc.addEventListener("keyup", e => {
-        const view = workspace.getActiveViewOfType(MarkdownView);
+    init: doc.addEventListener("keydown", e => {
+        if (e.key === 'Tab') {
+            console.log("TABBED")
+            const view = app.workspace.getActiveViewOfType(MarkdownView);
 
-        if (view.getMode() !== 'source') return;
-        
-        const editor = view.editor;
-        const doc = editor.getDoc();
-        const cursor = doc.getCursor();
-        const lineNo = cursor.line;
-        const currentLine = editor.getLine(lineNo);
-        const match = re.exec(currentLine);
-        console.log(match)
+            if (view.getMode() !== 'source') return;
 
-        if (false && match) {
-            const updatedLine = currentLine.replace(match[0], "NEW")
-            editor.setLine(lineNo, updatedLine)
-            // editor.replaceRange("found", cursor)
+            const editor = view.editor;
+            const doc = editor.getDoc();
+            const cursor = doc.getCursor();
+            const lineNo = cursor.line;
+            const currentLine = editor.getLine(lineNo);
+
+            const cleanedLine = currentLine.replace(/\s+/g, ' ').trim();
+            const stringList = cleanedLine.split(" ");
+            const lastString = stringList[stringList.length - 1];
+            console.log(lastString)
+            const roll = new DiceRoll(lastString);
+            stringList[stringList.length - 1] = roll.output;
+            editor.setLine(lineNo, stringList.join(' '));
         }
-
-        // console.log(currentLine);
-    })
+    });
 }

@@ -5,10 +5,18 @@ import initReplacer from './src/replacer';
 
 interface MyPluginSettings {
 	mySetting: string;
+	mythicOn: boolean;
+	tacOn: boolean;
+	replacer: boolean;
+	replacerSuffix: string;
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
+	mySetting: 'default',
+	mythicOn: true,
+	tacOn: false,
+	replacer: false,
+	replacerSuffix: '//'
 }
 
 export default class MyPlugin extends Plugin {
@@ -22,6 +30,7 @@ export default class MyPlugin extends Plugin {
 		let taggedFiles;
 
 		this.app.workspace.onLayoutReady(() => {
+			// get all files with tags
 			taggedFiles = getTaggedFiles(this.app);
 
 			taggedFiles.simpleList.forEach((table: any, index) => {
@@ -60,7 +69,7 @@ export default class MyPlugin extends Plugin {
 			new Notice('This is a notice!');
 		});
 
-		this.addStatusBarItem().setText('Status Bar Text');
+		// this.addStatusBarItem().setText('Status Bar Text');
 
 		// this.addCommand({
 		// 	id: 'open-sample-modal',
@@ -84,9 +93,13 @@ export default class MyPlugin extends Plugin {
 			console.log('codemirror', cm);
 		});
 
-		initReplacer(document, this.app.workspace)
+		console.log(this)
 
-		
+		if (this.settings.replacer) {
+			initReplacer(document, this.app)
+		}
+
+
 
 
 		// this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
@@ -156,18 +169,53 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Settings for my awesome plugin.' });
+		containerEl.createEl('h2', { text: 'Napoleon Settings' });
 
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue('')
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
+			.setName('Mythic')
+			.setDesc('Toggle Mythic GME')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.mythicOn)
+				.onChange(async () => {
+					this.plugin.settings.mythicOn = !this.plugin.settings.mythicOn;
 				}));
+
+		new Setting(containerEl)
+			.setName('The Adventure Crafter')
+			.setDesc('Toggle The Adventure Crafter')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.tacOn)
+				.onChange(async () => {
+					this.plugin.settings.tacOn = !this.plugin.settings.tacOn;
+					await this.plugin.saveSettings();
+				})
+			);
+
+		new Setting(containerEl)
+			.setName('Replacer')
+			.setDesc('Toggle text replacer')
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.replacer)
+				.onChange(async () => {
+					this.plugin.settings.replacer = !this.plugin.settings.replacer;
+					await this.plugin.saveSettings();
+				})
+			)
+			.addText(text => text
+				.setValue(this.plugin.settings.replacerSuffix)
+				.onChange(async (value) => {
+					this.plugin.settings.replacerSuffix = value;
+					await this.plugin.saveSettings();
+				})
+			)
+
+		// .addText(text => text
+		// 	.setPlaceholder('Enter your secret')
+		// 	.setValue('')
+		// 	.onChange(async (value) => {
+		// 		console.log('Secret: ' + value);
+		// 		this.plugin.settings.mySetting = value;
+		// 		await this.plugin.saveSettings();
+		// 	}));
 	}
 }

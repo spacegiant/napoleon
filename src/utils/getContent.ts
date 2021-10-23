@@ -9,7 +9,7 @@ const getContent = (app: App, file: any, cb: (value: string) => void) => {
         const items = sourceText.split(/\r?\n/);
         const prefix = file.frontmatter.label ? file.frontmatter.label + " " : "";
 
-        console.log(items)
+        // console.log(items)
         const roll = Math.floor(Math.random() * items.length )
         const text = `${prefix}${items[roll]}`;
         return cb(text);
