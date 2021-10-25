@@ -32,7 +32,10 @@ Implements https://greenimp.github.io/rpg-dice-roller/
 
 It's easy to use. 
 1. First, you need to toggle Replacer in Solo settings. (App may need Force Reload/restart)
-2. Type dice notation and press Tab.
+2. Type dice notation and press Tab (or use dice icon in sidebar or TAB command)
+
+Note: on toolbar you can assign the TAB command to the toolbar.
+Limitations: Currently does not handle spaces in dice notation e.g use {2d6,2d10}
 
 
 ## How to use

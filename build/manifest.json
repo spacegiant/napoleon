@@ -1,0 +1,10 @@
+{
+	"id": "obsidian-solo-plugin",
+	"name": "Solo",
+	"version": "1.0.2",
+	"minAppVersion": "0.9.12",
+	"description": "This is a set of solo tools for Obsidian.md.",
+	"author": "stargolem",
+	"authorUrl": "https://obsidian.md/about",
+	"isDesktopOnly": false
+}
