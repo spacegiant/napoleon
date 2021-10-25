@@ -1,7 +1,7 @@
 import { App, Modal, Notice, MarkdownView, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import getTaggedFiles from './src/utils/getTaggedFiles';
 import getContent from './src/utils/getContent';
-import initReplacer from './src/replacer';
+import Replacer from './src/replacer';
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -50,7 +50,6 @@ export default class MyPlugin extends Plugin {
 									const editor = view.editor;
 									const doc = editor.getDoc();
 									const cursor = doc.getCursor();
-									// const string = "\n" + `${roller(10, 13).text}\n${descriptor().text}\n${actionSubject().text}` + "\n\n";
 									getContent(this.app, table, (content: string) => {
 										const string = content;
 										doc.replaceRange(string, cursor);
@@ -67,6 +66,7 @@ export default class MyPlugin extends Plugin {
 
 		this.addRibbonIcon('dice', 'Sample Plugin', () => {
 			new Notice('This is a notice!');
+			Replacer(this.app);
 		});
 
 		// this.addStatusBarItem().setText('Status Bar Text');
@@ -87,16 +87,28 @@ export default class MyPlugin extends Plugin {
 		// 	}
 		// });
 
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new SoloSettingTab(this.app, this));
 
 		this.registerCodeMirror((cm: CodeMirror.Editor) => {
 			console.log('codemirror', cm);
 		});
 
-		console.log(this)
-
 		if (this.settings.replacer) {
-			initReplacer(document, this.app)
+			// initReplacer(document, this.app)
+			document.addEventListener("keydown", e => {
+				if (e.key === 'Tab') {
+					console.log("TABBEDxx")
+					Replacer(this.app);
+				}
+			});
+
+			this.addCommand({
+			id: 'solo-tab-alternative',
+			name: 'TAB',
+			checkCallback: (checking: boolean) => {
+				Replacer(this.app);
+			}
+		});
 		}
 
 
@@ -122,22 +134,22 @@ export default class MyPlugin extends Plugin {
 	}
 }
 
-class SoloModal extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
+// class SoloModal extends Modal {
+// 	constructor(app: App) {
+// 		super(app);
+// 	}
 
-	onOpen() {
-		let { contentEl, titleEl } = this;
-		titleEl.setText('Solo Tools');
-		contentEl.setText('Woah!');
-	}
+// 	onOpen() {
+// 		let { contentEl, titleEl } = this;
+// 		titleEl.setText('Solo Tools');
+// 		contentEl.setText('Woah!');
+// 	}
 
-	onClose() {
-		let { contentEl } = this;
-		contentEl.empty();
-	}
-}
+// 	onClose() {
+// 		let { contentEl } = this;
+// 		contentEl.empty();
+// 	}
+// }
 
 class SampleModal extends Modal {
 	constructor(app: App) {
@@ -156,7 +168,7 @@ class SampleModal extends Modal {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
+class SoloSettingTab extends PluginSettingTab {
 	plugin: MyPlugin;
 
 	constructor(app: App, plugin: MyPlugin) {
