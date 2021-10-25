@@ -1,11 +1,8 @@
-import { Workspace, MarkdownView, App, ItemView } from 'obsidian';
+import { Workspace, MarkdownView, App, ItemView, Platform } from 'obsidian';
 // https://github.com/GreenImp/rpg-dice-roller
 import { DiceRoll } from 'rpg-dice-roller';
 
 export default (doc: Document, app: any) => {
-    // const settings = app.plugins.plugins["obsidian-solo-plugin"].settings;
-    // console.log(">>>", settings.replacer);
-
     init: doc.addEventListener("keydown", e => {
         if (e.key === 'Tab') {
             console.log("TABBED")
@@ -22,8 +19,7 @@ export default (doc: Document, app: any) => {
             const cleanedLine = currentLine.replace(/\s+/g, ' ').trim();
             const stringList = cleanedLine.split(" ");
             const lastString = stringList[stringList.length - 1];
-            console.log(lastString)
-            const roll = new DiceRoll(lastString);
+            const roll = new DiceRoll(lastString.toLowerCase());
             stringList[stringList.length - 1] = roll.output;
             editor.setLine(lineNo, stringList.join(' '));
         }
