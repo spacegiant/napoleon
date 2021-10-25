@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
-    "move": "./move.sh"
+    "move": "./scripts/move.sh"
   },
   "keywords": [],
   "author": "",

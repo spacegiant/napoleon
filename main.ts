@@ -39,8 +39,9 @@ export default class MyPlugin extends Plugin {
 
     this.app.workspace.onLayoutReady(() => {
       this.addCommand({
-    	id: 'open-sample-modal',
+    	id: 'run-alternative-tab',
     	name: 'TAB',
+      icon: 'dice',
     	checkCallback: (checking: boolean) => {
     		let leaf = this.app.workspace.activeLeaf;
 
@@ -122,7 +123,6 @@ export default class MyPlugin extends Plugin {
       // initReplacer(document, this.app)
       document.addEventListener("keydown", (e) => {
         if (e.key === "Tab") {
-          console.log("TABBEDxx");
           Replacer(this.app);
         }
       });
@@ -165,22 +165,22 @@ export default class MyPlugin extends Plugin {
 // 	}
 // }
 
-class SampleModal extends Modal {
-  constructor(app: App) {
-    super(app);
-  }
+// class SampleModal extends Modal {
+//   constructor(app: App) {
+//     super(app);
+//   }
 
-  onOpen() {
-    let { contentEl, titleEl } = this;
-    titleEl.setText("Woah!");
-    contentEl.setText("Woah!");
-  }
+//   onOpen() {
+//     let { contentEl, titleEl } = this;
+//     titleEl.setText("Woah!");
+//     contentEl.setText("Woah!");
+//   }
 
-  onClose() {
-    let { contentEl } = this;
-    contentEl.empty();
-  }
-}
+//   onClose() {
+//     let { contentEl } = this;
+//     contentEl.empty();
+//   }
+// }
 
 class SoloSettingTab extends PluginSettingTab {
   plugin: MyPlugin;
