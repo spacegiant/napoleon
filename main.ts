@@ -8,7 +8,8 @@ import {
   Setting,
 } from "obsidian";
 import getTaggedFiles from "./src/utils/getTaggedFiles";
-import getContent from "./src/utils/getContent";
+import getRandomListItem from "./src/utils/getRandomListItem";
+import getRandomWeighedListItem from "./src/utils/getRandomWeightedListItem";
 import Replacer from "./src/replacer";
 
 interface MyPluginSettings {
@@ -57,9 +58,43 @@ export default class MyPlugin extends Plugin {
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
 
+      
       taggedFiles.simpleList.forEach((table: any, index) => {
         this.addCommand({
-          id: `command-${index}`,
+          id: `command-${table?.basename}`,
+          name: table?.basename,
+          checkCallback: (checking: boolean) => {
+            let leaf = this.app.workspace.activeLeaf;
+            if (leaf) {
+              if (!checking) {
+                console.log("simple")
+                const mode = leaf.getViewState().state.mode;
+                const isEditing = mode === "source";
+                
+                const view =
+                this.app.workspace.getActiveViewOfType(MarkdownView);
+                
+                if (isEditing && view) {
+                  const editor = view.editor;
+                  const doc = editor.getDoc();
+                  const cursor = doc.getCursor();
+                  getRandomListItem(this.app, table, (content: string) => {
+                    console.log(content)
+                    const string = content;
+                    doc.replaceRange(string, cursor);
+                  });
+                }
+              }
+              return true;
+            }
+            return false;
+          },
+        });
+      });
+
+      taggedFiles.weightedTables.forEach((table: any, index) => {
+        this.addCommand({
+          id: `command-${table?.basename}`,
           name: table?.basename,
           checkCallback: (checking: boolean) => {
             let leaf = this.app.workspace.activeLeaf;
@@ -75,7 +110,7 @@ export default class MyPlugin extends Plugin {
                   const editor = view.editor;
                   const doc = editor.getDoc();
                   const cursor = doc.getCursor();
-                  getContent(this.app, table, (content: string) => {
+                  getRandomWeighedListItem(this.app, table, (content: string) => {
                     const string = content;
                     doc.replaceRange(string, cursor);
                   });
@@ -86,13 +121,13 @@ export default class MyPlugin extends Plugin {
             return false;
           },
         });
-      });
+      })
+
+
     });
 
     this.addRibbonIcon("dice", "Dice", () => {
       const success = Replacer(this.app);
-      console.log(success);
-      // new Notice("Dice");
     });
 
     // this.addStatusBarItem().setText('Status Bar Text');
