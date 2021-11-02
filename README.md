@@ -6,7 +6,7 @@ WIP!!!
 
 Paste a random line from a markdown file at your cursor.
 
-### Creating a list
+### Creating a Simple List
 The markdown file needs to be tagged `solo/list`. This needs to go in front matter so it is not considered part of the random list.
 
 Create a note titles `Animals` like this:
@@ -25,6 +25,23 @@ Eagle
 The script searches for any markdown files tagged with `solo/list` and then registers a command to output a random item from the list. The command for the above example would run `CMD + P > Solo: Animals`. The Command is named using the label.
 
 Future plans: other list types such as weighted lists (in csv format probably), lists that have two tables linked (e.g. mythic action/subject).
+
+## Weighted random item
+Use this for lists that pick an option on say a 25-30 on a d100 roll. In this case it's weight is 6 (25,26,27,28,29,30).
+
+Example:
+
+```
+---
+tags:
+- solo/weighted
+---
+8 | Action
+6 | Mystery
+4 | Social
+1 | Tension
+1 | Personal
+```
 
 ## Inline dice roller
 
