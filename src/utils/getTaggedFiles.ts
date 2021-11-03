@@ -4,7 +4,7 @@ function getTaggedFiles(app: App) {
     const metadataCache = app.metadataCache;
     const markdownFiles = app.vault.getMarkdownFiles();
     const simpleList: {}[] = [];
-    const doubleTables: {}[] = [];
+    const decks: {}[] = [];
     const weightedTables: {}[] = [];
     const config: {}[] = [];
 
@@ -15,8 +15,8 @@ function getTaggedFiles(app: App) {
 
         if (cachedMetadata.frontmatter?.tags?.includes('solo/list')) {           
             simpleList.push(Object.assign({}, markdownFile, cachedMetadata))
-        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/double')) {           
-            doubleTables.push(Object.assign({}, markdownFile, cachedMetadata));
+        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/deck')) {           
+            decks.push(Object.assign({}, markdownFile, cachedMetadata));
         } else if (cachedMetadata.frontmatter?.tags?.includes('solo/weighted')) {
             weightedTables.push(Object.assign({}, markdownFile, cachedMetadata));
         } else if (cachedMetadata.frontmatter?.tags?.includes('solo/config')) {
@@ -26,7 +26,7 @@ function getTaggedFiles(app: App) {
 
     return {
         simpleList,
-        doubleTables,
+        decks,
         weightedTables,
         config
     };

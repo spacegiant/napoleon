@@ -18,7 +18,9 @@ const Replacer = (app: App) => {
             const lastString = stringList[stringList.length - 1];
             const roll = new DiceRoll(lastString.toLowerCase());
             stringList[stringList.length - 1] = roll.output;
-            editor.setLine(lineNo, stringList.join(' '));
+            const returnString = stringList.join(' ');
+            editor.setLine(lineNo, returnString);
+            editor.setCursor(lineNo, returnString.length);
 }
 
 export default Replacer;

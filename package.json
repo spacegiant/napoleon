@@ -4,7 +4,8 @@
   "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
   "main": "main.js",
   "scripts": {
-    "dev": "rollup --config rollup.config.js -w",
+    "watch": "rollup --config rollup.config.js -w",
+    "dev": "rollup --config rollup.config.js",
     "build": "rollup --config rollup.config.js --environment BUILD:production",
     "move": "./scripts/move.sh"
   },
