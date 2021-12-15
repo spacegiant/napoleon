@@ -85,6 +85,8 @@ export default class MyPlugin extends Plugin {
                     console.log(content);
                     const string = content;
                     doc.replaceRange(string, cursor);
+                    doc.focus()
+                    doc.setCursor(cursor.line, string.length)
                   });
                 }
               }
@@ -119,6 +121,8 @@ export default class MyPlugin extends Plugin {
                     (content: string) => {
                       const string = content;
                       doc.replaceRange(string, cursor);
+                      doc.focus()
+                      doc.setCursor(cursor.line, string.length)
                     }
                   );
                 }
@@ -196,8 +200,28 @@ export default class MyPlugin extends Plugin {
     });
 
     this.addRibbonIcon("d", "Insert D", () => {
-      const success = Replacer(this.app); 
-    })
+      let leaf = this.app.workspace.activeLeaf;
+      if (leaf) {
+          console.log("simple");
+          const mode = leaf.getViewState().state.mode;
+          const isEditing = mode === "source";
+
+          const view =
+            this.app.workspace.getActiveViewOfType(MarkdownView);
+
+          if (isEditing && view) {
+            const editor = view.editor;
+            const doc = editor.getDoc();
+            let cursor = doc.getCursor();
+            console.log(cursor)
+            doc.replaceRange('d', cursor);
+            doc.focus()
+            doc.setCursor({
+              line: cursor.line,
+              ch: cursor.ch + 1
+            })
+          }
+    }});
 
     this.addRibbonIcon("play", "Play", () => {
       const success = Replacer(this.app); 

@@ -20,6 +20,7 @@ const Replacer = (app: App) => {
             stringList[stringList.length - 1] = roll.output;
             const returnString = stringList.join(' ');
             editor.setLine(lineNo, returnString);
+            editor.focus()
             editor.setCursor(lineNo, returnString.length);
 }
 
