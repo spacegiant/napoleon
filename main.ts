@@ -1,3 +1,4 @@
+import { addIcons } from 'src/icons';
 import {
   App,
   Modal,
@@ -34,6 +35,8 @@ export default class MyPlugin extends Plugin {
 
   async onload() {
     console.log("loading plugin");
+
+    addIcons();
 
     await this.loadSettings();
 
@@ -191,6 +194,14 @@ export default class MyPlugin extends Plugin {
     this.addRibbonIcon("dice", "Dice", () => {
       const success = Replacer(this.app); 
     });
+
+    this.addRibbonIcon("d", "Insert D", () => {
+      const success = Replacer(this.app); 
+    })
+
+    this.addRibbonIcon("play", "Play", () => {
+      const success = Replacer(this.app); 
+    })
 
     // this.addStatusBarItem().setText('Status Bar Text');
 
