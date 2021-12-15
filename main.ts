@@ -1,4 +1,4 @@
-import { addIcons } from 'src/icons';
+import { addIcons } from "src/icons";
 import {
   App,
   Modal,
@@ -44,8 +44,64 @@ export default class MyPlugin extends Plugin {
 
     this.app.workspace.onLayoutReady(() => {
       this.addCommand({
+        id: "solo-home",
+        name: "Home",
+        icon: "play",
+        checkCallback: (checking: boolean) => {
+          let leaf = this.app.workspace.activeLeaf;
+
+          if (leaf) {
+            if (!checking) {
+              // this.app.workspace.detachLeavesOfType("markdown");
+              this.app.workspace.openLinkText("HOME", "", false, {
+                active: true,
+              });
+            }
+            return true;
+          }
+          return false;
+        },
+      });
+
+      this.addCommand({
+        id: "solo-add-d",
+        name: "Insert D", // Equivalent of tabbing on keyboard
+        icon: "d",
+        checkCallback: (checking: boolean) => {
+          let leaf = this.app.workspace.activeLeaf;
+
+          if (leaf) {
+            if (!checking) {
+              let leaf = this.app.workspace.activeLeaf;
+              if (leaf) {
+                const mode = leaf.getViewState().state.mode;
+                const isEditing = mode === "source";
+
+                const view =
+                  this.app.workspace.getActiveViewOfType(MarkdownView);
+
+                if (isEditing && view) {
+                  const editor = view.editor;
+                  const doc = editor.getDoc();
+                  let cursor = doc.getCursor();
+                  doc.replaceRange("d", cursor);
+                  doc.focus();
+                  doc.setCursor({
+                    line: cursor.line,
+                    ch: cursor.ch + 1,
+                  });
+                }
+              }
+            }
+            return true;
+          }
+          return false;
+        },
+      });
+
+      this.addCommand({
         id: "run-alternative-tab",
-        name: "TAB",
+        name: "TAB", // Equivalent of tabbing on keyboard
         icon: "dice",
         checkCallback: (checking: boolean) => {
           let leaf = this.app.workspace.activeLeaf;
@@ -85,8 +141,8 @@ export default class MyPlugin extends Plugin {
                     console.log(content);
                     const string = content;
                     doc.replaceRange(string, cursor);
-                    doc.focus()
-                    doc.setCursor(cursor.line, string.length)
+                    doc.focus();
+                    doc.setCursor(cursor.line, string.length);
                   });
                 }
               }
@@ -121,8 +177,8 @@ export default class MyPlugin extends Plugin {
                     (content: string) => {
                       const string = content;
                       doc.replaceRange(string, cursor);
-                      doc.focus()
-                      doc.setCursor(cursor.line, string.length)
+                      doc.focus();
+                      doc.setCursor(cursor.line, string.length);
                     }
                   );
                 }
@@ -153,11 +209,13 @@ export default class MyPlugin extends Plugin {
         if (checked.length + unchecked.length === 0) {
           return null;
         }
-        const path = this.app.metadataCache.getFirstLinkpathDest(table.basename, table.path);
+        const path = this.app.metadataCache.getFirstLinkpathDest(
+          table.basename,
+          table.path
+        );
         const content = this.app.vault.cachedRead(path).then((value) => {
-
-          console.log("VALUE ", value)
-        })
+          console.log("VALUE ", value);
+        });
         // do we need to shuffle?
         if (table.frontmatter.shuffle && checked.length === 0) {
           // reset all as checked
@@ -196,36 +254,9 @@ export default class MyPlugin extends Plugin {
     });
 
     this.addRibbonIcon("dice", "Dice", () => {
-      const success = Replacer(this.app); 
+      const success = Replacer(this.app);
     });
 
-    this.addRibbonIcon("d", "Insert D", () => {
-      let leaf = this.app.workspace.activeLeaf;
-      if (leaf) {
-          console.log("simple");
-          const mode = leaf.getViewState().state.mode;
-          const isEditing = mode === "source";
-
-          const view =
-            this.app.workspace.getActiveViewOfType(MarkdownView);
-
-          if (isEditing && view) {
-            const editor = view.editor;
-            const doc = editor.getDoc();
-            let cursor = doc.getCursor();
-            console.log(cursor)
-            doc.replaceRange('d', cursor);
-            doc.focus()
-            doc.setCursor({
-              line: cursor.line,
-              ch: cursor.ch + 1
-            })
-          }
-    }});
-
-    this.addRibbonIcon("play", "Play", () => {
-      const success = Replacer(this.app); 
-    })
 
     // this.addStatusBarItem().setText('Status Bar Text');
 
@@ -313,11 +344,6 @@ export default class MyPlugin extends Plugin {
 //     contentEl.empty();
 //   }
 // }
-
-
-
-
-
 
 class SoloSettingTab extends PluginSettingTab {
   plugin: MyPlugin;
