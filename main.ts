@@ -142,7 +142,7 @@ export default class MyPlugin extends Plugin {
                     const string = content;
                     doc.replaceRange(string, cursor);
                     doc.focus();
-                    doc.setCursor(cursor.line, string.length);
+                    doc.setCursor(cursor.line, string.length + cursor.ch);
                   });
                 }
               }
@@ -178,7 +178,7 @@ export default class MyPlugin extends Plugin {
                       const string = content;
                       doc.replaceRange(string, cursor);
                       doc.focus();
-                      doc.setCursor(cursor.line, string.length);
+                      doc.setCursor(cursor.line, string.length + cursor.ch);
                     }
                   );
                 }
