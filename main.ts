@@ -1,3 +1,4 @@
+import { addIcons } from "src/icons";
 import {
   App,
   Modal,
@@ -6,6 +7,7 @@ import {
   Plugin,
   PluginSettingTab,
   Setting,
+  ItemView,
 } from "obsidian";
 import getTaggedFiles from "./src/utils/getTaggedFiles";
 import getRandomListItem from "./src/utils/getRandomListItem";
@@ -34,31 +36,88 @@ export default class MyPlugin extends Plugin {
   async onload() {
     console.log("loading plugin");
 
+    addIcons();
+
     await this.loadSettings();
 
     let taggedFiles;
 
     this.app.workspace.onLayoutReady(() => {
       this.addCommand({
-    	id: 'run-alternative-tab',
-    	name: 'TAB',
-      icon: 'dice',
-    	checkCallback: (checking: boolean) => {
-    		let leaf = this.app.workspace.activeLeaf;
+        id: "solo-home",
+        name: "Home",
+        icon: "play",
+        checkCallback: (checking: boolean) => {
+          let leaf = this.app.workspace.activeLeaf;
 
-    		if (leaf) {
-    			if (!checking) {
-    				Replacer(this.app);
-    			}
-    			return true;
-    		}
-    		return false;
-    	}
-    });
+          if (leaf) {
+            if (!checking) {
+              // this.app.workspace.detachLeavesOfType("markdown");
+              this.app.workspace.openLinkText("HOME", "", false, {
+                active: true,
+              });
+            }
+            return true;
+          }
+          return false;
+        },
+      });
+
+      this.addCommand({
+        id: "solo-add-d",
+        name: "Insert D", // Equivalent of tabbing on keyboard
+        icon: "d",
+        checkCallback: (checking: boolean) => {
+          let leaf = this.app.workspace.activeLeaf;
+
+          if (leaf) {
+            if (!checking) {
+              let leaf = this.app.workspace.activeLeaf;
+              if (leaf) {
+                const mode = leaf.getViewState().state.mode;
+                const isEditing = mode === "source";
+
+                const view =
+                  this.app.workspace.getActiveViewOfType(MarkdownView);
+
+                if (isEditing && view) {
+                  const editor = view.editor;
+                  const doc = editor.getDoc();
+                  let cursor = doc.getCursor();
+                  doc.replaceRange("d", cursor);
+                  doc.focus();
+                  doc.setCursor({
+                    line: cursor.line,
+                    ch: cursor.ch + 1,
+                  });
+                }
+              }
+            }
+            return true;
+          }
+          return false;
+        },
+      });
+
+      this.addCommand({
+        id: "run-alternative-tab",
+        name: "TAB", // Equivalent of tabbing on keyboard
+        icon: "dice",
+        checkCallback: (checking: boolean) => {
+          let leaf = this.app.workspace.activeLeaf;
+
+          if (leaf) {
+            if (!checking) {
+              Replacer(this.app);
+            }
+            return true;
+          }
+          return false;
+        },
+      });
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
 
-      
       taggedFiles.simpleList.forEach((table: any, index) => {
         this.addCommand({
           id: `command-${table?.basename}`,
@@ -67,21 +126,23 @@ export default class MyPlugin extends Plugin {
             let leaf = this.app.workspace.activeLeaf;
             if (leaf) {
               if (!checking) {
-                console.log("simple")
+                console.log("simple");
                 const mode = leaf.getViewState().state.mode;
                 const isEditing = mode === "source";
-                
+
                 const view =
-                this.app.workspace.getActiveViewOfType(MarkdownView);
-                
+                  this.app.workspace.getActiveViewOfType(MarkdownView);
+
                 if (isEditing && view) {
                   const editor = view.editor;
                   const doc = editor.getDoc();
                   const cursor = doc.getCursor();
                   getRandomListItem(this.app, table, (content: string) => {
-                    console.log(content)
+                    console.log(content);
                     const string = content;
                     doc.replaceRange(string, cursor);
+                    doc.focus();
+                    doc.setCursor(cursor.line, string.length + cursor.ch);
                   });
                 }
               }
@@ -110,10 +171,16 @@ export default class MyPlugin extends Plugin {
                   const editor = view.editor;
                   const doc = editor.getDoc();
                   const cursor = doc.getCursor();
-                  getRandomWeighedListItem(this.app, table, (content: string) => {
-                    const string = content;
-                    doc.replaceRange(string, cursor);
-                  });
+                  getRandomWeighedListItem(
+                    this.app,
+                    table,
+                    (content: string) => {
+                      const string = content;
+                      doc.replaceRange(string, cursor);
+                      doc.focus();
+                      doc.setCursor(cursor.line, string.length + cursor.ch);
+                    }
+                  );
                 }
               }
               return true;
@@ -121,14 +188,75 @@ export default class MyPlugin extends Plugin {
             return false;
           },
         });
-      })
+      });
 
+      taggedFiles.decks.forEach((table: any, index) => {
+        const nonTask: any = [];
+        const checked: any = [];
+        const unchecked: any = [];
 
+        table.listItems.forEach((item: any) => {
+          if (!item.task) {
+            nonTask.push(item);
+          } else if (item.task === "x") {
+            checked.push(item);
+          } else {
+            unchecked.push(item);
+          }
+        });
+
+        // make sure they are not just list items
+        if (checked.length + unchecked.length === 0) {
+          return null;
+        }
+        const path = this.app.metadataCache.getFirstLinkpathDest(
+          table.basename,
+          table.path
+        );
+        const content = this.app.vault.cachedRead(path).then((value) => {
+          console.log("VALUE ", value);
+        });
+        // do we need to shuffle?
+        if (table.frontmatter.shuffle && checked.length === 0) {
+          // reset all as checked
+          const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+          unchecked.map((item: any) => {
+            const lineNo = item.position.start.line;
+            const newLine = view.editor.getLine(lineNo).replace("[ ]", "[x]");
+            item.task = "x";
+            view.editor.setLine(lineNo, newLine);
+          });
+        }
+
+        const roll = Math.floor(Math.random() * checked.length);
+        console.log("ROLL ", checked[roll]);
+
+        // const uncheckedItems = table.listItems.filter((item: any) => {
+        //   console.log(item.task)
+        //   return item.task && item.task !== "x";
+        // })s
+        // If all checked, then uncheck all items
+        // if(uncheckedItems.length === 0) {
+
+        // }
+        // table.listItems.forEach((item: any) => {
+        //   const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+        //   if (item.task !== "x") {
+        //     const lineNo = item.position.start.line;
+        //     const newLine = view.editor.getLine(lineNo).replace("[ ]", "[x]")
+        //     console.log(view.editor.getLine(lineNo))
+        //     item.task = "x";
+        //     view.editor.setLine(lineNo, newLine)
+
+        //   }
+        // });
+      });
     });
 
     this.addRibbonIcon("dice", "Dice", () => {
       const success = Replacer(this.app);
     });
+
 
     // this.addStatusBarItem().setText('Status Bar Text');
 
