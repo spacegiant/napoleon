@@ -16,7 +16,8 @@ const Replacer = (app: App) => {
             const cleanedLine = currentLine.replace(/\s+/g, ' ').trim();
             const stringList = cleanedLine.split(" ");
             const lastString = stringList[stringList.length - 1];
-            const roll = new DiceRoll(lastString.toLowerCase());
+            // const roll = new DiceRoll(lastString.toLowerCase());
+            const roll = new DiceRoll(lastString);
             stringList[stringList.length - 1] = roll.output;
             const returnString = stringList.join(' ');
             editor.setLine(lineNo, returnString);
