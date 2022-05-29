@@ -26,6 +26,8 @@ The script searches for any markdown files tagged with `solo/list` and then regi
 
 Future plans: other list types such as weighted lists (in csv format probably), lists that have two tables linked (e.g. mythic action/subject).
 
+**Note**: You need to reload app to get the list to register as a Command.
+
 ## Weighted random item
 Use this for lists that pick an option on say a 25-30 on a d100 roll. In this case it's weight is 6 (25,26,27,28,29,30).
 
@@ -53,6 +55,8 @@ It's easy to use.
 
 Note: on toolbar you can assign the TAB command to the toolbar.
 Limitations: Currently does not handle spaces in dice notation e.g use {2d6,2d10}
+
+**Note**: You can add the *Dice command* to the toolbar for easier access on Mobile.
 
 
 ## How to use
