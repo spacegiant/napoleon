@@ -16,6 +16,7 @@ import Replacer from "./src/replacer";
 import openHomePage from "src/openHomePage";
 import insertD from "src/insertD";
 import insertTab from "src/insertTab";
+import registerSimpleRandomTable from "src/registerSimpleRandomTable";
 
 interface MyPluginSettings {
   mySetting: string;
@@ -73,34 +74,7 @@ export default class MyPlugin extends Plugin {
         this.addCommand({
           id: `command-${table?.basename}`,
           name: table?.basename,
-          checkCallback: (checking: boolean) => {
-            let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-            if (leaf) {
-              if (!checking) {
-                console.log("simple");
-                const mode = leaf.getState().mode;
-                const isEditing = mode === "source";
-
-                const view =
-                  this.app.workspace.getActiveViewOfType(MarkdownView);
-
-                if (isEditing && view) {
-                  const editor = view.editor;
-                  const doc = editor.getDoc();
-                  const cursor = doc.getCursor();
-                  getRandomListItem(this.app, table, (content: string) => {
-                    console.log(content);
-                    const string = content;
-                    doc.replaceRange(string, cursor);
-                    doc.focus();
-                    doc.setCursor(cursor.line, string.length + cursor.ch);
-                  });
-                }
-              }
-              return true;
-            }
-            return false;
-          },
+          checkCallback: registerSimpleRandomTable(this.app, table),
         });
       });
 

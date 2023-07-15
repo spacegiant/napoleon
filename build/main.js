@@ -2779,7 +2779,7 @@ var addIcons = () => {
 };
 
 // main.ts
-var import_obsidian6 = __toModule(require("obsidian"));
+var import_obsidian7 = __toModule(require("obsidian"));
 
 // src/utils/getTaggedFiles.ts
 function getTaggedFiles(app) {
@@ -2812,21 +2812,6 @@ function getTaggedFiles(app) {
   };
 }
 var getTaggedFiles_default = getTaggedFiles;
-
-// src/utils/getRandomListItem.ts
-var getRandomListItem = (app, file, cb) => {
-  const offset = file.frontmatter.position.end.offset;
-  const path = app.metadataCache.getFirstLinkpathDest(file.name, file.path);
-  return app.vault.cachedRead(path).then((value) => {
-    const sourceText = value.substring(offset).trim();
-    const items = sourceText.split(/\r?\n/);
-    const prefix = file.frontmatter.label ? file.frontmatter.label + " " : "";
-    const roll = Math.floor(Math.random() * items.length);
-    const text = `${prefix}${items[roll]}`;
-    return cb(text);
-  }).catch((error) => console.log(error));
-};
-var getRandomListItem_default = getRandomListItem;
 
 // src/utils/getRandomWeightedListItem.ts
 var getRandomWeightedListItem = (app, file, cb) => {
@@ -44403,6 +44388,54 @@ var insertTab = (app) => {
 };
 var insertTab_default = insertTab;
 
+// src/registerSimpleRandomTable/index.ts
+var import_obsidian6 = __toModule(require("obsidian"));
+
+// src/utils/getRandomListItem.ts
+var getRandomListItem = (app, file, cb) => {
+  const offset = file.frontmatter.position.end.offset;
+  const path = app.metadataCache.getFirstLinkpathDest(file.name, file.path);
+  return app.vault.cachedRead(path).then((value) => {
+    const sourceText = value.substring(offset).trim();
+    const items = sourceText.split(/\r?\n/);
+    const prefix = file.frontmatter.label ? file.frontmatter.label + " " : "";
+    const roll = Math.floor(Math.random() * items.length);
+    const text = `${prefix}${items[roll]}`;
+    return cb(text);
+  }).catch((error) => console.log(error));
+};
+var getRandomListItem_default = getRandomListItem;
+
+// src/registerSimpleRandomTable/index.ts
+var registerSimpleRandomTable = (app, table) => {
+  return (checking) => {
+    let leaf = app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
+    if (leaf) {
+      if (!checking) {
+        console.log("simple");
+        const mode2 = leaf.getState().mode;
+        const isEditing = mode2 === "source";
+        const view = app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
+        if (isEditing && view) {
+          const editor = view.editor;
+          const doc = editor.getDoc();
+          const cursor = doc.getCursor();
+          getRandomListItem_default(app, table, (content) => {
+            console.log(content);
+            const string3 = content;
+            doc.replaceRange(string3, cursor);
+            doc.focus();
+            doc.setCursor(cursor.line, string3.length + cursor.ch);
+          });
+        }
+      }
+      return true;
+    }
+    return false;
+  };
+};
+var registerSimpleRandomTable_default = registerSimpleRandomTable;
+
 // main.ts
 var DEFAULT_SETTINGS = {
   mySetting: "default",
@@ -44411,7 +44444,7 @@ var DEFAULT_SETTINGS = {
   replacer: false,
   replacerSuffix: "//"
 };
-var MyPlugin = class extends import_obsidian6.Plugin {
+var MyPlugin = class extends import_obsidian7.Plugin {
   onload() {
     return __async(this, null, function* () {
       console.log("loading plugin");
@@ -44442,31 +44475,7 @@ var MyPlugin = class extends import_obsidian6.Plugin {
           this.addCommand({
             id: `command-${table == null ? void 0 : table.basename}`,
             name: table == null ? void 0 : table.basename,
-            checkCallback: (checking) => {
-              let leaf = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
-              if (leaf) {
-                if (!checking) {
-                  console.log("simple");
-                  const mode2 = leaf.getState().mode;
-                  const isEditing = mode2 === "source";
-                  const view = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
-                  if (isEditing && view) {
-                    const editor = view.editor;
-                    const doc = editor.getDoc();
-                    const cursor = doc.getCursor();
-                    getRandomListItem_default(this.app, table, (content) => {
-                      console.log(content);
-                      const string3 = content;
-                      doc.replaceRange(string3, cursor);
-                      doc.focus();
-                      doc.setCursor(cursor.line, string3.length + cursor.ch);
-                    });
-                  }
-                }
-                return true;
-              }
-              return false;
-            }
+            checkCallback: registerSimpleRandomTable_default(this.app, table)
           });
         });
         taggedFiles.weightedTables.forEach((table, index2) => {
@@ -44474,12 +44483,12 @@ var MyPlugin = class extends import_obsidian6.Plugin {
             id: `command-${table == null ? void 0 : table.basename}`,
             name: table == null ? void 0 : table.basename,
             checkCallback: (checking) => {
-              let leaf = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
+              let leaf = this.app.workspace.getActiveViewOfType(import_obsidian7.MarkdownView);
               if (leaf) {
                 if (!checking) {
                   const mode2 = leaf.getState().mode;
                   const isEditing = mode2 === "source";
-                  const view = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
+                  const view = this.app.workspace.getActiveViewOfType(import_obsidian7.MarkdownView);
                   if (isEditing && view) {
                     const editor = view.editor;
                     const doc = editor.getDoc();
@@ -44519,7 +44528,7 @@ var MyPlugin = class extends import_obsidian6.Plugin {
             console.log("VALUE ", value);
           });
           if (table.frontmatter.shuffle && checked.length === 0) {
-            const view = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
+            const view = this.app.workspace.getActiveViewOfType(import_obsidian7.MarkdownView);
             unchecked.map((item) => {
               const lineNo = item.position.start.line;
               const newLine = view.editor.getLine(lineNo).replace("[ ]", "[x]");
@@ -44558,7 +44567,7 @@ var MyPlugin = class extends import_obsidian6.Plugin {
     });
   }
 };
-var SoloSettingTab = class extends import_obsidian6.PluginSettingTab {
+var SoloSettingTab = class extends import_obsidian7.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -44567,14 +44576,14 @@ var SoloSettingTab = class extends import_obsidian6.PluginSettingTab {
     let { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "Napoleon Settings" });
-    new import_obsidian6.Setting(containerEl).setName("Mythic").setDesc("Toggle Mythic GME").addToggle((toggle) => toggle.setValue(this.plugin.settings.mythicOn).onChange(() => __async(this, null, function* () {
+    new import_obsidian7.Setting(containerEl).setName("Mythic").setDesc("Toggle Mythic GME").addToggle((toggle) => toggle.setValue(this.plugin.settings.mythicOn).onChange(() => __async(this, null, function* () {
       this.plugin.settings.mythicOn = !this.plugin.settings.mythicOn;
     })));
-    new import_obsidian6.Setting(containerEl).setName("The Adventure Crafter").setDesc("Toggle The Adventure Crafter").addToggle((toggle) => toggle.setValue(this.plugin.settings.tacOn).onChange(() => __async(this, null, function* () {
+    new import_obsidian7.Setting(containerEl).setName("The Adventure Crafter").setDesc("Toggle The Adventure Crafter").addToggle((toggle) => toggle.setValue(this.plugin.settings.tacOn).onChange(() => __async(this, null, function* () {
       this.plugin.settings.tacOn = !this.plugin.settings.tacOn;
       yield this.plugin.saveSettings();
     })));
-    new import_obsidian6.Setting(containerEl).setName("Replacer").setDesc("Toggle text replacer").addToggle((toggle) => toggle.setValue(this.plugin.settings.replacer).onChange(() => __async(this, null, function* () {
+    new import_obsidian7.Setting(containerEl).setName("Replacer").setDesc("Toggle text replacer").addToggle((toggle) => toggle.setValue(this.plugin.settings.replacer).onChange(() => __async(this, null, function* () {
       this.plugin.settings.replacer = !this.plugin.settings.replacer;
       yield this.plugin.saveSettings();
     }))).addText((text) => text.setValue(this.plugin.settings.replacerSuffix).onChange((value) => __async(this, null, function* () {
