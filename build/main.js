@@ -44516,38 +44516,6 @@ var MyPlugin = class extends import_obsidian8.Plugin {
             checkCallback: registerWeightedRandomTable_default(app, table)
           });
         });
-        taggedFiles.decks.forEach((table, index2) => {
-          const nonTask = [];
-          const checked = [];
-          const unchecked = [];
-          table.listItems.forEach((item) => {
-            if (!item.task) {
-              nonTask.push(item);
-            } else if (item.task === "x") {
-              checked.push(item);
-            } else {
-              unchecked.push(item);
-            }
-          });
-          if (checked.length + unchecked.length === 0) {
-            return null;
-          }
-          const path = this.app.metadataCache.getFirstLinkpathDest(table.basename, table.path);
-          const content = this.app.vault.cachedRead(path).then((value) => {
-            console.log("VALUE ", value);
-          });
-          if (table.frontmatter.shuffle && checked.length === 0) {
-            const view = this.app.workspace.getActiveViewOfType(import_obsidian8.MarkdownView);
-            unchecked.map((item) => {
-              const lineNo = item.position.start.line;
-              const newLine = view.editor.getLine(lineNo).replace("[ ]", "[x]");
-              item.task = "x";
-              view.editor.setLine(lineNo, newLine);
-            });
-          }
-          const roll = Math.floor(Math.random() * checked.length);
-          console.log("ROLL ", checked[roll]);
-        });
       });
       this.addRibbonIcon("dice", "Dice", () => {
         const success = replacer_default2(this.app);
