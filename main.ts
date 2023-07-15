@@ -14,6 +14,7 @@ import getRandomListItem from "./src/utils/getRandomListItem";
 import getRandomWeighedListItem from "./src/utils/getRandomWeightedListItem";
 import Replacer from "./src/replacer";
 import openHomePage from "src/openHomePage";
+import insertD from "src/insertD";
 
 interface MyPluginSettings {
   mySetting: string;
@@ -55,36 +56,7 @@ export default class MyPlugin extends Plugin {
         id: "solo-add-d",
         name: "Insert D", // Equivalent of tabbing on keyboard
         icon: "d",
-        checkCallback: (checking: boolean) => {
-          let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-
-          if (leaf) {
-            if (!checking) {
-              let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-              if (leaf) {
-                const mode = leaf.getState().mode;
-                const isEditing = mode === "source";
-
-                const view =
-                  this.app.workspace.getActiveViewOfType(MarkdownView);
-
-                if (isEditing && view) {
-                  const editor = view.editor;
-                  const doc = editor.getDoc();
-                  let cursor = doc.getCursor();
-                  doc.replaceRange("d", cursor);
-                  doc.focus();
-                  doc.setCursor({
-                    line: cursor.line,
-                    ch: cursor.ch + 1,
-                  });
-                }
-              }
-            }
-            return true;
-          }
-          return false;
-        },
+        checkCallback: insertD(this.app),
       });
 
       this.addCommand({
