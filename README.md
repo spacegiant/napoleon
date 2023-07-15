@@ -1,12 +1,13 @@
 # Napoleon (Solo Tools) for Obsidian.md
 
-WIP!!! 
+WIP!!!
 
 ## Simple random item
 
 Paste a random line from a markdown file at your cursor.
 
 ### Creating a Simple List
+
 The markdown file needs to be tagged `solo/list`. This needs to go in front matter so it is not considered part of the random list.
 
 Create a note titles `Animals` like this:
@@ -29,6 +30,7 @@ Future plans: other list types such as weighted lists (in csv format probably), 
 **Note**: You need to reload app to get the list to register as a Command.
 
 ## Weighted random item
+
 Use this for lists that pick an option on say a 25-30 on a d100 roll. In this case it's weight is 6 (25,26,27,28,29,30).
 
 Example:
@@ -49,15 +51,15 @@ tags:
 
 Implements https://greenimp.github.io/rpg-dice-roller/
 
-It's easy to use. 
+It's easy to use.
+
 1. First, you need to toggle Replacer in Solo settings. (App may need Force Reload/restart)
 2. Type dice notation and press Tab (or use dice icon in sidebar or TAB command)
 
 Note: on toolbar you can assign the TAB command to the toolbar.
 Limitations: Currently does not handle spaces in dice notation e.g use {2d6,2d10}
 
-**Note**: You can add the *Dice command* to the toolbar for easier access on Mobile.
-
+**Note**: You can add the _Dice command_ to the toolbar for easier access on Mobile.
 
 ## How to use
 
@@ -70,4 +72,7 @@ Limitations: Currently does not handle spaces in dice notation e.g use {2d6,2d10
 - Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/napoleon/`.
 
 ### Development links
+
 - https://github.com/obsidianmd/obsidian-api
+
+Make sure `esbuild.config.mjs` is updated to output to `/build` folder.
