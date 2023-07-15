@@ -1,7 +1,13 @@
 import { App, CachedMetadata, TFile } from "obsidian";
 import type { TaggedFilesCollection } from "src/types";
 
-function getTaggedFiles(app: App) {
+interface TaggedFiles {
+  simpleList: TaggedFilesCollection;
+  weightedTables: TaggedFilesCollection;
+  config: TaggedFilesCollection;
+}
+
+function getTaggedFiles(app: App): TaggedFiles | undefined {
   const metadataCache = app.metadataCache;
   const markdownFiles = app.vault.getMarkdownFiles();
   const simpleList: TaggedFilesCollection = [];
