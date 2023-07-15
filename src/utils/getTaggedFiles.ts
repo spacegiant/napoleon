@@ -1,5 +1,5 @@
-import { App, CachedMetadata, TFile } from "obsidian";
-import type { TaggedFilesCollection } from "src/types";
+import type { App } from 'obsidian';
+import type { TaggedFilesCollection } from 'src/types';
 
 interface TaggedFiles {
   simpleList: TaggedFilesCollection;
@@ -16,14 +16,15 @@ function getTaggedFiles(app: App): TaggedFiles | undefined {
 
   for (const markdownFile of markdownFiles) {
     const cachedMetadata = metadataCache.getFileCache(markdownFile);
+    // if (cachedMetadata?.frontmatter?.tags == null) return;
 
-    if (!cachedMetadata) return;
+    const tags = cachedMetadata?.frontmatter?.tags;
 
-    if (cachedMetadata.frontmatter?.tags?.includes("solo/list")) {
+    if (tags?.includes('solo/list')) {
       simpleList.push(Object.assign({}, markdownFile, cachedMetadata));
-    } else if (cachedMetadata.frontmatter?.tags?.includes("solo/weighted")) {
+    } else if (tags?.includes('solo/weighted')) {
       weightedTables.push(Object.assign({}, markdownFile, cachedMetadata));
-    } else if (cachedMetadata.frontmatter?.tags?.includes("solo/config")) {
+    } else if (tags?.includes('solo/config')) {
       config.push(markdownFile);
     }
   }

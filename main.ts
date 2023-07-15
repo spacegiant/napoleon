@@ -1,14 +1,14 @@
-import { addIcons } from "src/icons";
-import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
-import getTaggedFiles from "./src/utils/getTaggedFiles";
-import Replacer from "./src/replacer";
+import { addIcons } from 'src/icons';
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import getTaggedFiles from './src/utils/getTaggedFiles';
+import Replacer from './src/replacer';
 import {
   openHomePage,
   insertD,
   insertTab,
   registerSimpleRandomTable,
   registerWeightedRandomTable,
-} from "./src/commands";
+} from './src/commands';
 
 interface MyPluginSettings {
   mySetting: string;
@@ -19,18 +19,18 @@ interface MyPluginSettings {
 }
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
-  mySetting: "default",
+  mySetting: 'default',
   mythicOn: true,
   tacOn: false,
   replacer: false,
-  replacerSuffix: "//",
+  replacerSuffix: '//',
 };
 
 export default class MyPlugin extends Plugin {
   settings: MyPluginSettings;
 
   async onload() {
-    console.log("loading plugin");
+    console.log('loading plugin');
 
     addIcons();
 
@@ -40,31 +40,30 @@ export default class MyPlugin extends Plugin {
 
     this.app.workspace.onLayoutReady(() => {
       this.addCommand({
-        id: "solo-home",
-        name: "Home",
-        icon: "play",
+        id: 'solo-home',
+        name: 'Home',
+        icon: 'play',
         checkCallback: openHomePage(this.app),
       });
 
       this.addCommand({
-        id: "solo-add-d",
-        name: "Insert D", // Equivalent of tabbing on keyboard
-        icon: "d",
+        id: 'solo-add-d',
+        name: 'Insert D', // Equivalent of tabbing on keyboard
+        icon: 'd',
         checkCallback: insertD(this.app),
       });
 
       this.addCommand({
-        id: "run-alternative-tab",
-        name: "TAB", // Equivalent of tabbing on keyboard
-        icon: "dice",
+        id: 'run-alternative-tab',
+        name: 'TAB', // Equivalent of tabbing on keyboard
+        icon: 'dice',
         checkCallback: insertTab(this.app),
       });
 
       // CREATE RANDOM TABLES
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
-
-      taggedFiles.simpleList.forEach((table: any, index) => {
+      taggedFiles?.simpleList.forEach((table: any, index) => {
         this.addCommand({
           id: `command-${table?.basename}`,
           name: table?.basename,
@@ -72,7 +71,7 @@ export default class MyPlugin extends Plugin {
         });
       });
 
-      taggedFiles.weightedTables.forEach((table: any, index) => {
+      taggedFiles?.weightedTables.forEach((table: any, index) => {
         this.addCommand({
           id: `command-${table?.basename}`,
           name: table?.basename,
@@ -84,7 +83,7 @@ export default class MyPlugin extends Plugin {
       // taggedFiles.decks.forEach((table: any, index) => { });
     });
 
-    this.addRibbonIcon("dice", "Dice", () => {
+    this.addRibbonIcon('dice', 'Dice', () => {
       const success = Replacer(this.app);
     });
 
@@ -109,8 +108,8 @@ export default class MyPlugin extends Plugin {
     this.addSettingTab(new SoloSettingTab(this.app, this));
 
     if (this.settings.replacer) {
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Tab") {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
           Replacer(this.app);
         }
       });
@@ -124,7 +123,7 @@ export default class MyPlugin extends Plugin {
   }
 
   onunload() {
-    console.log("unloading plugin");
+    console.log('unloading plugin');
   }
 
   async loadSettings() {
@@ -183,11 +182,11 @@ class SoloSettingTab extends PluginSettingTab {
 
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Napoleon Settings" });
+    containerEl.createEl('h2', { text: 'Napoleon Settings' });
 
     new Setting(containerEl)
-      .setName("Mythic")
-      .setDesc("Toggle Mythic GME")
+      .setName('Mythic')
+      .setDesc('Toggle Mythic GME')
       .addToggle((toggle) =>
         toggle.setValue(this.plugin.settings.mythicOn).onChange(async () => {
           this.plugin.settings.mythicOn = !this.plugin.settings.mythicOn;
@@ -195,8 +194,8 @@ class SoloSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("The Adventure Crafter")
-      .setDesc("Toggle The Adventure Crafter")
+      .setName('The Adventure Crafter')
+      .setDesc('Toggle The Adventure Crafter')
       .addToggle((toggle) =>
         toggle.setValue(this.plugin.settings.tacOn).onChange(async () => {
           this.plugin.settings.tacOn = !this.plugin.settings.tacOn;
@@ -205,8 +204,8 @@ class SoloSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName("Replacer")
-      .setDesc("Toggle text replacer")
+      .setName('Replacer')
+      .setDesc('Toggle text replacer')
       .addToggle((toggle) =>
         toggle.setValue(this.plugin.settings.replacer).onChange(async () => {
           this.plugin.settings.replacer = !this.plugin.settings.replacer;

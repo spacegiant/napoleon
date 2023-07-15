@@ -2783,30 +2783,25 @@ var import_obsidian8 = __toModule(require("obsidian"));
 
 // src/utils/getTaggedFiles.ts
 function getTaggedFiles(app2) {
-  var _a, _b, _c, _d, _e, _f, _g, _h;
+  var _a;
   const metadataCache = app2.metadataCache;
   const markdownFiles = app2.vault.getMarkdownFiles();
   const simpleList = [];
-  const decks = [];
   const weightedTables = [];
   const config4 = [];
   for (const markdownFile of markdownFiles) {
     const cachedMetadata = metadataCache.getFileCache(markdownFile);
-    if (!cachedMetadata)
-      return;
-    if ((_b = (_a = cachedMetadata.frontmatter) == null ? void 0 : _a.tags) == null ? void 0 : _b.includes("solo/list")) {
+    const tags = (_a = cachedMetadata == null ? void 0 : cachedMetadata.frontmatter) == null ? void 0 : _a.tags;
+    if (tags == null ? void 0 : tags.includes("solo/list")) {
       simpleList.push(Object.assign({}, markdownFile, cachedMetadata));
-    } else if ((_d = (_c = cachedMetadata.frontmatter) == null ? void 0 : _c.tags) == null ? void 0 : _d.includes("solo/deck")) {
-      decks.push(Object.assign({}, markdownFile, cachedMetadata));
-    } else if ((_f = (_e = cachedMetadata.frontmatter) == null ? void 0 : _e.tags) == null ? void 0 : _f.includes("solo/weighted")) {
+    } else if (tags == null ? void 0 : tags.includes("solo/weighted")) {
       weightedTables.push(Object.assign({}, markdownFile, cachedMetadata));
-    } else if ((_h = (_g = cachedMetadata.frontmatter) == null ? void 0 : _g.tags) == null ? void 0 : _h.includes("solo/config")) {
+    } else if (tags == null ? void 0 : tags.includes("solo/config")) {
       config4.push(markdownFile);
     }
   }
   return {
     simpleList,
-    decks,
     weightedTables,
     config: config4
   };
@@ -44271,7 +44266,7 @@ var logSymbol = Symbol("log");
 // src/replacer/replacer.ts
 var Replacer = (app2) => {
   const view = app2.workspace.getActiveViewOfType(import_obsidian2.MarkdownView);
-  if (view.getMode() !== "source")
+  if ((view == null ? void 0 : view.getMode()) !== "source")
     return;
   const editor = view.editor;
   const doc = editor.getDoc();
@@ -44363,18 +44358,22 @@ var insertTab_default = insertTab;
 var import_obsidian6 = __toModule(require("obsidian"));
 
 // src/utils/getRandomListItem.ts
-var getRandomListItem = (app2, file, cb) => {
+var getRandomListItem = (app2, file, cb) => __async(void 0, null, function* () {
   const offset = file.frontmatter.position.end.offset;
   const path = app2.metadataCache.getFirstLinkpathDest(file.name, file.path);
-  return app2.vault.cachedRead(path).then((value) => {
+  if (!path)
+    return;
+  yield app2.vault.cachedRead(path).then((value) => {
     const sourceText = value.substring(offset).trim();
     const items = sourceText.split(/\r?\n/);
     const prefix = file.frontmatter.label ? file.frontmatter.label + " " : "";
     const roll = Math.floor(Math.random() * items.length);
     const text = `${prefix}${items[roll]}`;
-    return cb(text);
-  }).catch((error) => console.log(error));
-};
+    cb(text);
+  }).catch((error) => {
+    console.log(error);
+  });
+});
 var getRandomListItem_default = getRandomListItem;
 
 // src/commands/registerSimpleRandomTable/index.ts
@@ -44411,10 +44410,12 @@ var registerSimpleRandomTable_default = registerSimpleRandomTable;
 var import_obsidian7 = __toModule(require("obsidian"));
 
 // src/utils/getRandomWeightedListItem.ts
-var getRandomWeightedListItem = (app2, file, cb) => {
+var getRandomWeightedListItem = (app2, file, cb) => __async(void 0, null, function* () {
   const offset = file.frontmatter.position.end.offset;
   const path = app2.metadataCache.getFirstLinkpathDest(file.name, file.path);
-  return app2.vault.cachedRead(path).then((value) => {
+  if (path == null)
+    return;
+  yield app2.vault.cachedRead(path).then((value) => {
     const sourceText = value.substring(offset).trim();
     const items = sourceText.split(/\r?\n/);
     const itemsBounds = [];
@@ -44434,9 +44435,11 @@ var getRandomWeightedListItem = (app2, file, cb) => {
     const result = items[index2].split("|")[1].trim();
     const text = `1d${totalBounds} = ${roll} : ${result}`;
     console.log(`roll ${roll}, index ${index2}, ${items[index2].split("|")[1]}`);
-    return cb(text);
-  }).catch((error) => console.log(error));
-};
+    cb(text);
+  }).catch((error) => {
+    console.log(error);
+  });
+});
 var getRandomWeightedListItem_default = getRandomWeightedListItem;
 
 // src/commands/registerWeightedRandomTable/index.ts
@@ -44502,14 +44505,14 @@ var MyPlugin = class extends import_obsidian8.Plugin {
           checkCallback: insertTab_default(this.app)
         });
         taggedFiles = getTaggedFiles_default(this.app);
-        taggedFiles.simpleList.forEach((table, index2) => {
+        taggedFiles == null ? void 0 : taggedFiles.simpleList.forEach((table, index2) => {
           this.addCommand({
             id: `command-${table == null ? void 0 : table.basename}`,
             name: table == null ? void 0 : table.basename,
             checkCallback: registerSimpleRandomTable_default(this.app, table)
           });
         });
-        taggedFiles.weightedTables.forEach((table, index2) => {
+        taggedFiles == null ? void 0 : taggedFiles.weightedTables.forEach((table, index2) => {
           this.addCommand({
             id: `command-${table == null ? void 0 : table.basename}`,
             name: table == null ? void 0 : table.basename,

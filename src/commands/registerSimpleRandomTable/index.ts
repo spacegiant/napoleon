@@ -1,5 +1,5 @@
-import { App, MarkdownView } from "obsidian";
-import getRandomListItem from "src/utils/getRandomListItem";
+import { App, MarkdownView } from 'obsidian';
+import getRandomListItem from 'src/utils/getRandomListItem';
 
 // TODO: Fix table: any
 const registerSimpleRandomTable = (app: App, table: any) => {
@@ -7,9 +7,9 @@ const registerSimpleRandomTable = (app: App, table: any) => {
     let leaf = app.workspace.getActiveViewOfType(MarkdownView);
     if (leaf) {
       if (!checking) {
-        console.log("simple");
+        console.log('simple');
         const mode = leaf.getState().mode;
-        const isEditing = mode === "source";
+        const isEditing = mode === 'source';
 
         const view = app.workspace.getActiveViewOfType(MarkdownView);
 
