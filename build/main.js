@@ -2779,7 +2779,7 @@ var addIcons = () => {
 };
 
 // main.ts
-var import_obsidian5 = __toModule(require("obsidian"));
+var import_obsidian6 = __toModule(require("obsidian"));
 
 // src/utils/getTaggedFiles.ts
 function getTaggedFiles(app) {
@@ -44387,6 +44387,22 @@ var insertD = (app) => {
 };
 var insertD_default = insertD;
 
+// src/insertTab/index.ts
+var import_obsidian5 = __toModule(require("obsidian"));
+var insertTab = (app) => {
+  return (checking) => {
+    let leaf = app.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
+    if (leaf) {
+      if (!checking) {
+        replacer_default2(app);
+      }
+      return true;
+    }
+    return false;
+  };
+};
+var insertTab_default = insertTab;
+
 // main.ts
 var DEFAULT_SETTINGS = {
   mySetting: "default",
@@ -44395,7 +44411,7 @@ var DEFAULT_SETTINGS = {
   replacer: false,
   replacerSuffix: "//"
 };
-var MyPlugin = class extends import_obsidian5.Plugin {
+var MyPlugin = class extends import_obsidian6.Plugin {
   onload() {
     return __async(this, null, function* () {
       console.log("loading plugin");
@@ -44419,16 +44435,7 @@ var MyPlugin = class extends import_obsidian5.Plugin {
           id: "run-alternative-tab",
           name: "TAB",
           icon: "dice",
-          checkCallback: (checking) => {
-            let leaf = this.app.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
-            if (leaf) {
-              if (!checking) {
-                replacer_default2(this.app);
-              }
-              return true;
-            }
-            return false;
-          }
+          checkCallback: insertTab_default(this.app)
         });
         taggedFiles = getTaggedFiles_default(this.app);
         taggedFiles.simpleList.forEach((table, index2) => {
@@ -44436,13 +44443,13 @@ var MyPlugin = class extends import_obsidian5.Plugin {
             id: `command-${table == null ? void 0 : table.basename}`,
             name: table == null ? void 0 : table.basename,
             checkCallback: (checking) => {
-              let leaf = this.app.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
+              let leaf = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
               if (leaf) {
                 if (!checking) {
                   console.log("simple");
                   const mode2 = leaf.getState().mode;
                   const isEditing = mode2 === "source";
-                  const view = this.app.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
+                  const view = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
                   if (isEditing && view) {
                     const editor = view.editor;
                     const doc = editor.getDoc();
@@ -44467,12 +44474,12 @@ var MyPlugin = class extends import_obsidian5.Plugin {
             id: `command-${table == null ? void 0 : table.basename}`,
             name: table == null ? void 0 : table.basename,
             checkCallback: (checking) => {
-              let leaf = this.app.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
+              let leaf = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
               if (leaf) {
                 if (!checking) {
                   const mode2 = leaf.getState().mode;
                   const isEditing = mode2 === "source";
-                  const view = this.app.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
+                  const view = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
                   if (isEditing && view) {
                     const editor = view.editor;
                     const doc = editor.getDoc();
@@ -44512,7 +44519,7 @@ var MyPlugin = class extends import_obsidian5.Plugin {
             console.log("VALUE ", value);
           });
           if (table.frontmatter.shuffle && checked.length === 0) {
-            const view = this.app.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
+            const view = this.app.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
             unchecked.map((item) => {
               const lineNo = item.position.start.line;
               const newLine = view.editor.getLine(lineNo).replace("[ ]", "[x]");
@@ -44551,7 +44558,7 @@ var MyPlugin = class extends import_obsidian5.Plugin {
     });
   }
 };
-var SoloSettingTab = class extends import_obsidian5.PluginSettingTab {
+var SoloSettingTab = class extends import_obsidian6.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -44560,14 +44567,14 @@ var SoloSettingTab = class extends import_obsidian5.PluginSettingTab {
     let { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "Napoleon Settings" });
-    new import_obsidian5.Setting(containerEl).setName("Mythic").setDesc("Toggle Mythic GME").addToggle((toggle) => toggle.setValue(this.plugin.settings.mythicOn).onChange(() => __async(this, null, function* () {
+    new import_obsidian6.Setting(containerEl).setName("Mythic").setDesc("Toggle Mythic GME").addToggle((toggle) => toggle.setValue(this.plugin.settings.mythicOn).onChange(() => __async(this, null, function* () {
       this.plugin.settings.mythicOn = !this.plugin.settings.mythicOn;
     })));
-    new import_obsidian5.Setting(containerEl).setName("The Adventure Crafter").setDesc("Toggle The Adventure Crafter").addToggle((toggle) => toggle.setValue(this.plugin.settings.tacOn).onChange(() => __async(this, null, function* () {
+    new import_obsidian6.Setting(containerEl).setName("The Adventure Crafter").setDesc("Toggle The Adventure Crafter").addToggle((toggle) => toggle.setValue(this.plugin.settings.tacOn).onChange(() => __async(this, null, function* () {
       this.plugin.settings.tacOn = !this.plugin.settings.tacOn;
       yield this.plugin.saveSettings();
     })));
-    new import_obsidian5.Setting(containerEl).setName("Replacer").setDesc("Toggle text replacer").addToggle((toggle) => toggle.setValue(this.plugin.settings.replacer).onChange(() => __async(this, null, function* () {
+    new import_obsidian6.Setting(containerEl).setName("Replacer").setDesc("Toggle text replacer").addToggle((toggle) => toggle.setValue(this.plugin.settings.replacer).onChange(() => __async(this, null, function* () {
       this.plugin.settings.replacer = !this.plugin.settings.replacer;
       yield this.plugin.saveSettings();
     }))).addText((text) => text.setValue(this.plugin.settings.replacerSuffix).onChange((value) => __async(this, null, function* () {

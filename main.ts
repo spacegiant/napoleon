@@ -15,6 +15,7 @@ import getRandomWeighedListItem from "./src/utils/getRandomWeightedListItem";
 import Replacer from "./src/replacer";
 import openHomePage from "src/openHomePage";
 import insertD from "src/insertD";
+import insertTab from "src/insertTab";
 
 interface MyPluginSettings {
   mySetting: string;
@@ -63,17 +64,7 @@ export default class MyPlugin extends Plugin {
         id: "run-alternative-tab",
         name: "TAB", // Equivalent of tabbing on keyboard
         icon: "dice",
-        checkCallback: (checking: boolean) => {
-          let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-
-          if (leaf) {
-            if (!checking) {
-              Replacer(this.app);
-            }
-            return true;
-          }
-          return false;
-        },
+        checkCallback: insertTab(this.app),
       });
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
