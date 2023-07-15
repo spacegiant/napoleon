@@ -48,7 +48,7 @@ export default class MyPlugin extends Plugin {
         name: "Home",
         icon: "play",
         checkCallback: (checking: boolean) => {
-          let leaf = this.app.workspace.activeLeaf;
+          let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
 
           if (leaf) {
             if (!checking) {
@@ -68,13 +68,13 @@ export default class MyPlugin extends Plugin {
         name: "Insert D", // Equivalent of tabbing on keyboard
         icon: "d",
         checkCallback: (checking: boolean) => {
-          let leaf = this.app.workspace.activeLeaf;
+          let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
 
           if (leaf) {
             if (!checking) {
-              let leaf = this.app.workspace.activeLeaf;
+              let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
               if (leaf) {
-                const mode = leaf.getViewState().state.mode;
+                const mode = leaf.getState().mode;
                 const isEditing = mode === "source";
 
                 const view =
@@ -104,7 +104,7 @@ export default class MyPlugin extends Plugin {
         name: "TAB", // Equivalent of tabbing on keyboard
         icon: "dice",
         checkCallback: (checking: boolean) => {
-          let leaf = this.app.workspace.activeLeaf;
+          let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
 
           if (leaf) {
             if (!checking) {
@@ -123,11 +123,11 @@ export default class MyPlugin extends Plugin {
           id: `command-${table?.basename}`,
           name: table?.basename,
           checkCallback: (checking: boolean) => {
-            let leaf = this.app.workspace.activeLeaf;
+            let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
             if (leaf) {
               if (!checking) {
                 console.log("simple");
-                const mode = leaf.getViewState().state.mode;
+                const mode = leaf.getState().mode;
                 const isEditing = mode === "source";
 
                 const view =
@@ -158,10 +158,10 @@ export default class MyPlugin extends Plugin {
           id: `command-${table?.basename}`,
           name: table?.basename,
           checkCallback: (checking: boolean) => {
-            let leaf = this.app.workspace.activeLeaf;
+            let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
             if (leaf) {
               if (!checking) {
-                const mode = leaf.getViewState().state.mode;
+                const mode = leaf.getState().mode;
                 const isEditing = mode === "source";
 
                 const view =
@@ -257,7 +257,6 @@ export default class MyPlugin extends Plugin {
       const success = Replacer(this.app);
     });
 
-
     // this.addStatusBarItem().setText('Status Bar Text');
 
     // this.addCommand({
@@ -277,10 +276,6 @@ export default class MyPlugin extends Plugin {
     // });
 
     this.addSettingTab(new SoloSettingTab(this.app, this));
-
-    this.registerCodeMirror((cm: CodeMirror.Editor) => {
-      console.log("codemirror", cm);
-    });
 
     if (this.settings.replacer) {
       // initReplacer(document, this.app)
