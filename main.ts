@@ -1,18 +1,7 @@
 import { addIcons } from "src/icons";
-import {
-  App,
-  Modal,
-  Notice,
-  MarkdownView,
-  Plugin,
-  PluginSettingTab,
-  Setting,
-  ItemView,
-} from "obsidian";
+import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
 import getTaggedFiles from "./src/utils/getTaggedFiles";
-
 import Replacer from "./src/replacer";
-
 import {
   openHomePage,
   insertD,
@@ -120,7 +109,6 @@ export default class MyPlugin extends Plugin {
     this.addSettingTab(new SoloSettingTab(this.app, this));
 
     if (this.settings.replacer) {
-      // initReplacer(document, this.app)
       document.addEventListener("keydown", (e) => {
         if (e.key === "Tab") {
           Replacer(this.app);
