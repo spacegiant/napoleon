@@ -44293,7 +44293,7 @@ var replacer_default = Replacer;
 // src/replacer/index.ts
 var replacer_default2 = replacer_default;
 
-// src/openHomePage/index.ts
+// src/commands/openHomePage/index.ts
 var import_obsidian3 = __toModule(require("obsidian"));
 var openHomePage = (app2) => {
   return (checking) => {
@@ -44311,7 +44311,7 @@ var openHomePage = (app2) => {
 };
 var openHomePage_default = openHomePage;
 
-// src/insertD/index.ts
+// src/commands/insertD/index.ts
 var import_obsidian4 = __toModule(require("obsidian"));
 var insertD = (app2) => {
   return (checking) => {
@@ -44343,7 +44343,7 @@ var insertD = (app2) => {
 };
 var insertD_default = insertD;
 
-// src/insertTab/index.ts
+// src/commands/insertTab/index.ts
 var import_obsidian5 = __toModule(require("obsidian"));
 var insertTab = (app2) => {
   return (checking) => {
@@ -44359,7 +44359,7 @@ var insertTab = (app2) => {
 };
 var insertTab_default = insertTab;
 
-// src/registerSimpleRandomTable/index.ts
+// src/commands/registerSimpleRandomTable/index.ts
 var import_obsidian6 = __toModule(require("obsidian"));
 
 // src/utils/getRandomListItem.ts
@@ -44377,7 +44377,7 @@ var getRandomListItem = (app2, file, cb) => {
 };
 var getRandomListItem_default = getRandomListItem;
 
-// src/registerSimpleRandomTable/index.ts
+// src/commands/registerSimpleRandomTable/index.ts
 var registerSimpleRandomTable = (app2, table) => {
   return (checking) => {
     let leaf = app2.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
@@ -44407,7 +44407,7 @@ var registerSimpleRandomTable = (app2, table) => {
 };
 var registerSimpleRandomTable_default = registerSimpleRandomTable;
 
-// src/registerWeightedRandomTable/index.ts
+// src/commands/registerWeightedRandomTable/index.ts
 var import_obsidian7 = __toModule(require("obsidian"));
 
 // src/utils/getRandomWeightedListItem.ts
@@ -44439,7 +44439,7 @@ var getRandomWeightedListItem = (app2, file, cb) => {
 };
 var getRandomWeightedListItem_default = getRandomWeightedListItem;
 
-// src/registerWeightedRandomTable/index.ts
+// src/commands/registerWeightedRandomTable/index.ts
 var registerWeightedRandomTable = (app2, table) => {
   return (checking) => {
     let leaf = app2.workspace.getActiveViewOfType(import_obsidian7.MarkdownView);

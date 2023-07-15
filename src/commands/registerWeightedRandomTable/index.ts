@@ -1,5 +1,5 @@
 import { App, MarkdownView } from "obsidian";
-import getRandomWeighedListItem from "../../src/utils/getRandomWeightedListItem";
+import getRandomWeighedListItem from "../../utils/getRandomWeightedListItem";
 
 // TODO: Fix table: any
 const registerWeightedRandomTable = (app: App, table: any) => {

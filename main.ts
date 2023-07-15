@@ -12,11 +12,14 @@ import {
 import getTaggedFiles from "./src/utils/getTaggedFiles";
 
 import Replacer from "./src/replacer";
-import openHomePage from "src/openHomePage";
-import insertD from "src/insertD";
-import insertTab from "src/insertTab";
-import registerSimpleRandomTable from "src/registerSimpleRandomTable";
-import registerWeightedRandomTable from "src/registerWeightedRandomTable";
+
+import {
+  openHomePage,
+  insertD,
+  insertTab,
+  registerSimpleRandomTable,
+  registerWeightedRandomTable,
+} from "./src/commands";
 
 interface MyPluginSettings {
   mySetting: string;
@@ -67,6 +70,8 @@ export default class MyPlugin extends Plugin {
         icon: "dice",
         checkCallback: insertTab(this.app),
       });
+
+      // CREATE RANDOM TABLES
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
 
