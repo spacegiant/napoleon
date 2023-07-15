@@ -13,6 +13,7 @@ import getTaggedFiles from "./src/utils/getTaggedFiles";
 import getRandomListItem from "./src/utils/getRandomListItem";
 import getRandomWeighedListItem from "./src/utils/getRandomWeightedListItem";
 import Replacer from "./src/replacer";
+import openHomePage from "src/openHomePage";
 
 interface MyPluginSettings {
   mySetting: string;
@@ -47,20 +48,7 @@ export default class MyPlugin extends Plugin {
         id: "solo-home",
         name: "Home",
         icon: "play",
-        checkCallback: (checking: boolean) => {
-          let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-
-          if (leaf) {
-            if (!checking) {
-              // this.app.workspace.detachLeavesOfType("markdown");
-              this.app.workspace.openLinkText("HOME", "", false, {
-                active: true,
-              });
-            }
-            return true;
-          }
-          return false;
-        },
+        checkCallback: openHomePage(this.app),
       });
 
       this.addCommand({
