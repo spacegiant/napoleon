@@ -10,13 +10,13 @@ import {
   ItemView,
 } from "obsidian";
 import getTaggedFiles from "./src/utils/getTaggedFiles";
-import getRandomListItem from "./src/utils/getRandomListItem";
-import getRandomWeighedListItem from "./src/utils/getRandomWeightedListItem";
+
 import Replacer from "./src/replacer";
 import openHomePage from "src/openHomePage";
 import insertD from "src/insertD";
 import insertTab from "src/insertTab";
 import registerSimpleRandomTable from "src/registerSimpleRandomTable";
+import registerWeightedRandomTable from "src/registerWeightedRandomTable";
 
 interface MyPluginSettings {
   mySetting: string;
@@ -82,36 +82,7 @@ export default class MyPlugin extends Plugin {
         this.addCommand({
           id: `command-${table?.basename}`,
           name: table?.basename,
-          checkCallback: (checking: boolean) => {
-            let leaf = this.app.workspace.getActiveViewOfType(MarkdownView);
-            if (leaf) {
-              if (!checking) {
-                const mode = leaf.getState().mode;
-                const isEditing = mode === "source";
-
-                const view =
-                  this.app.workspace.getActiveViewOfType(MarkdownView);
-
-                if (isEditing && view) {
-                  const editor = view.editor;
-                  const doc = editor.getDoc();
-                  const cursor = doc.getCursor();
-                  getRandomWeighedListItem(
-                    this.app,
-                    table,
-                    (content: string) => {
-                      const string = content;
-                      doc.replaceRange(string, cursor);
-                      doc.focus();
-                      doc.setCursor(cursor.line, string.length + cursor.ch);
-                    }
-                  );
-                }
-              }
-              return true;
-            }
-            return false;
-          },
+          checkCallback: registerWeightedRandomTable(app, table),
         });
       });
 
