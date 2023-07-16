@@ -87,24 +87,6 @@ export default class MyPlugin extends Plugin {
       const success = Replacer(this.app);
     });
 
-    // this.addStatusBarItem().setText('Status Bar Text');
-
-    // this.addCommand({
-    // 	id: 'open-sample-modal',
-    // 	name: 'Open Sample Modal',
-    // 	checkCallback: (checking: boolean) => {
-    // 		let leaf = this.app.workspace.activeLeaf;
-
-    // 		if (leaf) {
-    // 			if (!checking) {
-    // 				new SampleModal(this.app).open();
-    // 			}
-    // 			return true;
-    // 		}
-    // 		return false;
-    // 	}
-    // });
-
     this.addSettingTab(new SoloSettingTab(this.app, this));
 
     if (this.settings.replacer) {
@@ -114,12 +96,6 @@ export default class MyPlugin extends Plugin {
         }
       });
     }
-
-    // this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-    // 	console.log('click', evt);
-    // });
-
-    // this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
   }
 
   onunload() {
@@ -134,40 +110,6 @@ export default class MyPlugin extends Plugin {
     await this.saveData(this.settings);
   }
 }
-
-// class SoloModal extends Modal {
-// 	constructor(app: App) {
-// 		super(app);
-// 	}
-
-// 	onOpen() {
-// 		let { contentEl, titleEl } = this;
-// 		titleEl.setText('Solo Tools');
-// 		contentEl.setText('Woah!');
-// 	}
-
-// 	onClose() {
-// 		let { contentEl } = this;
-// 		contentEl.empty();
-// 	}
-// }
-
-// class SampleModal extends Modal {
-//   constructor(app: App) {
-//     super(app);
-//   }
-
-//   onOpen() {
-//     let { contentEl, titleEl } = this;
-//     titleEl.setText("Woah!");
-//     contentEl.setText("Woah!");
-//   }
-
-//   onClose() {
-//     let { contentEl } = this;
-//     contentEl.empty();
-//   }
-// }
 
 class SoloSettingTab extends PluginSettingTab {
   plugin: MyPlugin;
@@ -220,14 +162,5 @@ class SoloSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           })
       );
-
-    // .addText(text => text
-    // 	.setPlaceholder('Enter your secret')
-    // 	.setValue('')
-    // 	.onChange(async (value) => {
-    // 		console.log('Secret: ' + value);
-    // 		this.plugin.settings.mySetting = value;
-    // 		await this.plugin.saveSettings();
-    // 	}));
   }
 }
