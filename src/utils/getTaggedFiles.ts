@@ -1,35 +1,39 @@
-import { App } from 'obsidian';
+import type { App } from 'obsidian';
+import type { TaggedFilesCollection } from 'src/types';
 
-function getTaggedFiles(app: App) {
-    const metadataCache = app.metadataCache;
-    const markdownFiles = app.vault.getMarkdownFiles();
-    const simpleList: {}[] = [];
-    const decks: {}[] = [];
-    const weightedTables: {}[] = [];
-    const config: {}[] = [];
+interface TaggedFiles {
+  simpleList: TaggedFilesCollection;
+  weightedTables: TaggedFilesCollection;
+  config: TaggedFilesCollection;
+}
 
-    for (const markdownFile of markdownFiles) {
-        const cachedMetadata = metadataCache.getFileCache(markdownFile);
+function getTaggedFiles(app: App): TaggedFiles | undefined {
+  const metadataCache = app.metadataCache;
+  const markdownFiles = app.vault.getMarkdownFiles();
+  const simpleList: TaggedFilesCollection = [];
+  const weightedTables: TaggedFilesCollection = [];
+  const config: TaggedFilesCollection = [];
 
-        if (!cachedMetadata) return;
+  for (const markdownFile of markdownFiles) {
+    const cachedMetadata = metadataCache.getFileCache(markdownFile);
+    // if (cachedMetadata?.frontmatter?.tags == null) return;
 
-        if (cachedMetadata.frontmatter?.tags?.includes('solo/list')) {           
-            simpleList.push(Object.assign({}, markdownFile, cachedMetadata))
-        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/deck')) {           
-            decks.push(Object.assign({}, markdownFile, cachedMetadata));
-        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/weighted')) {
-            weightedTables.push(Object.assign({}, markdownFile, cachedMetadata));
-        } else if (cachedMetadata.frontmatter?.tags?.includes('solo/config')) {
-            config.push(markdownFile)
-        }
+    const tags = cachedMetadata?.frontmatter?.tags;
+
+    if (tags?.includes('solo/list')) {
+      simpleList.push(Object.assign({}, markdownFile, cachedMetadata));
+    } else if (tags?.includes('solo/weighted')) {
+      weightedTables.push(Object.assign({}, markdownFile, cachedMetadata));
+    } else if (tags?.includes('solo/config')) {
+      config.push(markdownFile);
     }
+  }
 
-    return {
-        simpleList,
-        decks,
-        weightedTables,
-        config
-    };
+  return {
+    simpleList,
+    weightedTables,
+    config,
+  };
 }
 
 export default getTaggedFiles;
