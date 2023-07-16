@@ -1,10 +1,10 @@
-import { App, MarkdownView } from 'obsidian';
-import getRandomListItem from 'src/utils/getRandomListItem';
+import { type App, MarkdownView } from 'obsidian';
+import getRandomListItem from '../../utils/getRandomListItem';
 
 // TODO: Fix table: any
 const registerSimpleRandomTable = (app: App, table: any) => {
   return (checking: boolean) => {
-    let leaf = app.workspace.getActiveViewOfType(MarkdownView);
+    const leaf = app.workspace.getActiveViewOfType(MarkdownView);
     if (leaf) {
       if (!checking) {
         console.log('simple');
@@ -17,6 +17,7 @@ const registerSimpleRandomTable = (app: App, table: any) => {
           const editor = view.editor;
           const doc = editor.getDoc();
           const cursor = doc.getCursor();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           getRandomListItem(app, table, (content: string) => {
             console.log(content);
             const string = content;

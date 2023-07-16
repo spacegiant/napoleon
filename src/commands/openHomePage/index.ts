@@ -1,13 +1,14 @@
-import { App, MarkdownView } from "obsidian";
+import { type App, MarkdownView } from 'obsidian';
 
 const openHomePage = (app: App) => {
   return (checking: boolean) => {
-    let leaf = app.workspace.getActiveViewOfType(MarkdownView);
+    const leaf = app.workspace.getActiveViewOfType(MarkdownView);
 
     if (leaf) {
       if (!checking) {
         // this.app.workspace.detachLeavesOfType("markdown");
-        app.workspace.openLinkText("HOME", "", false, {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        app.workspace.openLinkText('HOME', '', false, {
           active: true,
         });
       }

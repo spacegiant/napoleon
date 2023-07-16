@@ -1,5 +1,5 @@
-import { addIcons } from 'src/icons';
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { addIcons } from './src/icons';
+import { type App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import getTaggedFiles from './src/utils/getTaggedFiles';
 import Replacer from './src/replacer';
 import {
@@ -29,7 +29,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 export default class MyPlugin extends Plugin {
   settings: MyPluginSettings;
 
-  async onload() {
+  async onload(): Promise<void> {
     console.log('loading plugin');
 
     addIcons();
@@ -64,16 +64,20 @@ export default class MyPlugin extends Plugin {
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
       taggedFiles?.simpleList.forEach((table: any, index) => {
+        const tableBasename = table?.basename;
+        if (typeof tableBasename !== 'string') return;
         this.addCommand({
-          id: `command-${table?.basename}`,
+          id: `command-${tableBasename}`,
           name: table?.basename,
           checkCallback: registerSimpleRandomTable(this.app, table),
         });
       });
 
       taggedFiles?.weightedTables.forEach((table: any, index) => {
+        const tableBasename = table?.basename;
+        if (typeof tableBasename !== 'string') return;
         this.addCommand({
-          id: `command-${table?.basename}`,
+          id: `command-${tableBasename}`,
           name: table?.basename,
           checkCallback: registerWeightedRandomTable(app, table),
         });
@@ -83,9 +87,9 @@ export default class MyPlugin extends Plugin {
       // taggedFiles.decks.forEach((table: any, index) => { });
     });
 
-    this.addRibbonIcon('dice', 'Dice', () => {
-      const success = Replacer(this.app);
-    });
+    // this.addRibbonIcon('dice', 'Dice', () => {
+    //   const success = Replacer(this.app);
+    // });
 
     this.addSettingTab(new SoloSettingTab(this.app, this));
 
@@ -98,15 +102,15 @@ export default class MyPlugin extends Plugin {
     }
   }
 
-  onunload() {
+  onunload(): void {
     console.log('unloading plugin');
   }
 
-  async loadSettings() {
+  async loadSettings(): Promise<void> {
     this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
   }
 
-  async saveSettings() {
+  async saveSettings(): Promise<void> {
     await this.saveData(this.settings);
   }
 }
@@ -120,7 +124,7 @@ class SoloSettingTab extends PluginSettingTab {
   }
 
   display(): void {
-    let { containerEl } = this;
+    const { containerEl } = this;
 
     containerEl.empty();
 
