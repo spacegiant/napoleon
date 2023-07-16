@@ -1,8 +1,8 @@
-import { MarkdownView, App } from 'obsidian';
+import { MarkdownView, type App } from 'obsidian';
 // https://github.com/GreenImp/rpg-dice-roller
 import { DiceRoll } from 'rpg-dice-roller';
 
-const Replacer = (app: App) => {
+const Replacer = (app: App): void => {
   const view = app.workspace.getActiveViewOfType(MarkdownView);
 
   if (view?.getMode() !== 'source') return;

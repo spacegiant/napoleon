@@ -44292,7 +44292,7 @@ var replacer_default2 = replacer_default;
 var import_obsidian3 = __toModule(require("obsidian"));
 var openHomePage = (app2) => {
   return (checking) => {
-    let leaf = app2.workspace.getActiveViewOfType(import_obsidian3.MarkdownView);
+    const leaf = app2.workspace.getActiveViewOfType(import_obsidian3.MarkdownView);
     if (leaf) {
       if (!checking) {
         app2.workspace.openLinkText("HOME", "", false, {
@@ -44310,10 +44310,10 @@ var openHomePage_default = openHomePage;
 var import_obsidian4 = __toModule(require("obsidian"));
 var insertD = (app2) => {
   return (checking) => {
-    let leaf = app2.workspace.getActiveViewOfType(import_obsidian4.MarkdownView);
+    const leaf = app2.workspace.getActiveViewOfType(import_obsidian4.MarkdownView);
     if (leaf) {
       if (!checking) {
-        let leaf2 = app2.workspace.getActiveViewOfType(import_obsidian4.MarkdownView);
+        const leaf2 = app2.workspace.getActiveViewOfType(import_obsidian4.MarkdownView);
         if (leaf2) {
           const mode2 = leaf2.getState().mode;
           const isEditing = mode2 === "source";
@@ -44321,7 +44321,7 @@ var insertD = (app2) => {
           if (isEditing && view) {
             const editor = view.editor;
             const doc = editor.getDoc();
-            let cursor = doc.getCursor();
+            const cursor = doc.getCursor();
             doc.replaceRange("d", cursor);
             doc.focus();
             doc.setCursor({
@@ -44342,7 +44342,7 @@ var insertD_default = insertD;
 var import_obsidian5 = __toModule(require("obsidian"));
 var insertTab = (app2) => {
   return (checking) => {
-    let leaf = app2.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
+    const leaf = app2.workspace.getActiveViewOfType(import_obsidian5.MarkdownView);
     if (leaf) {
       if (!checking) {
         replacer_default2(app2);
@@ -44379,7 +44379,7 @@ var getRandomListItem_default = getRandomListItem;
 // src/commands/registerSimpleRandomTable/index.ts
 var registerSimpleRandomTable = (app2, table) => {
   return (checking) => {
-    let leaf = app2.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
+    const leaf = app2.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
     if (leaf) {
       if (!checking) {
         console.log("simple");
@@ -44445,7 +44445,7 @@ var getRandomWeightedListItem_default = getRandomWeightedListItem;
 // src/commands/registerWeightedRandomTable/index.ts
 var registerWeightedRandomTable = (app2, table) => {
   return (checking) => {
-    let leaf = app2.workspace.getActiveViewOfType(import_obsidian7.MarkdownView);
+    const leaf = app2.workspace.getActiveViewOfType(import_obsidian7.MarkdownView);
     if (leaf) {
       if (!checking) {
         const mode2 = leaf.getState().mode;
@@ -44506,22 +44506,25 @@ var MyPlugin = class extends import_obsidian8.Plugin {
         });
         taggedFiles = getTaggedFiles_default(this.app);
         taggedFiles == null ? void 0 : taggedFiles.simpleList.forEach((table, index2) => {
+          const tableBasename = table == null ? void 0 : table.basename;
+          if (typeof tableBasename !== "string")
+            return;
           this.addCommand({
-            id: `command-${table == null ? void 0 : table.basename}`,
+            id: `command-${tableBasename}`,
             name: table == null ? void 0 : table.basename,
             checkCallback: registerSimpleRandomTable_default(this.app, table)
           });
         });
         taggedFiles == null ? void 0 : taggedFiles.weightedTables.forEach((table, index2) => {
+          const tableBasename = table == null ? void 0 : table.basename;
+          if (typeof tableBasename !== "string")
+            return;
           this.addCommand({
-            id: `command-${table == null ? void 0 : table.basename}`,
+            id: `command-${tableBasename}`,
             name: table == null ? void 0 : table.basename,
             checkCallback: registerWeightedRandomTable_default(app, table)
           });
         });
-      });
-      this.addRibbonIcon("dice", "Dice", () => {
-        const success = replacer_default2(this.app);
       });
       this.addSettingTab(new SoloSettingTab(this.app, this));
       if (this.settings.replacer) {
@@ -44553,7 +44556,7 @@ var SoloSettingTab = class extends import_obsidian8.PluginSettingTab {
     this.plugin = plugin;
   }
   display() {
-    let { containerEl } = this;
+    const { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "Napoleon Settings" });
     new import_obsidian8.Setting(containerEl).setName("Mythic").setDesc("Toggle Mythic GME").addToggle((toggle) => toggle.setValue(this.plugin.settings.mythicOn).onChange(() => __async(this, null, function* () {

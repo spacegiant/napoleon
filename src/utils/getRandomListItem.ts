@@ -17,6 +17,7 @@ const getRandomListItem: (
     .then((value) => {
       const sourceText = value.substring(offset).trim();
       const items = sourceText.split(/\r?\n/);
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       const prefix = file.frontmatter.label ? file.frontmatter.label + ' ' : '';
 
       const roll = Math.floor(Math.random() * items.length);

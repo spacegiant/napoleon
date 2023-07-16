@@ -1,14 +1,14 @@
-import { App, MarkdownView } from "obsidian";
-import getRandomWeighedListItem from "../../utils/getRandomWeightedListItem";
+import { type App, MarkdownView } from 'obsidian';
+import getRandomWeighedListItem from '../../utils/getRandomWeightedListItem';
 
 // TODO: Fix table: any
 const registerWeightedRandomTable = (app: App, table: any) => {
   return (checking: boolean) => {
-    let leaf = app.workspace.getActiveViewOfType(MarkdownView);
+    const leaf = app.workspace.getActiveViewOfType(MarkdownView);
     if (leaf) {
       if (!checking) {
         const mode = leaf.getState().mode;
-        const isEditing = mode === "source";
+        const isEditing = mode === 'source';
 
         const view = app.workspace.getActiveViewOfType(MarkdownView);
 
@@ -16,6 +16,7 @@ const registerWeightedRandomTable = (app: App, table: any) => {
           const editor = view.editor;
           const doc = editor.getDoc();
           const cursor = doc.getCursor();
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
           getRandomWeighedListItem(app, table, (content: string) => {
             const string = content;
             doc.replaceRange(string, cursor);
