@@ -18,3 +18,5 @@ src/mythic/data
 # and
 .DS_Store
 move.sh
+.env
+copy.sh

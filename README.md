@@ -76,3 +76,18 @@ Limitations: Currently does not handle spaces in dice notation e.g use {2d6,2d10
 - https://github.com/obsidianmd/obsidian-api
 
 Make sure `esbuild.config.mjs` is updated to output to `/build` folder.
+
+### Automatically copy files to vault
+
+`copy.sh`:
+
+```sh
+#!/bin/bash
+
+if [ $1="prod" ]
+then
+    cp ./build/* '<path to prod vault>/.obsidian/plugins/napoleon'
+else
+    cp ./build/* '<path to dev vault>.obsidian/plugins/napoleon'
+fi
+```
