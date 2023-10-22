@@ -10,21 +10,8 @@ import {
   registerWeightedRandomTable,
 } from './src/commands';
 
-interface MyPluginSettings {
-  mySetting: string;
-  mythicOn: boolean;
-  tacOn: boolean;
-  replacer: boolean;
-  replacerSuffix: string;
-}
-
-const DEFAULT_SETTINGS: MyPluginSettings = {
-  mySetting: 'default',
-  mythicOn: true,
-  tacOn: false,
-  replacer: false,
-  replacerSuffix: '//',
-};
+import { MyPluginSettings } from 'src/types';
+import { DEFAULT_SETTINGS } from 'src/constants';
 
 export default class MyPlugin extends Plugin {
   settings: MyPluginSettings;

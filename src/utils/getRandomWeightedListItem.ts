@@ -29,7 +29,6 @@ const getRandomWeightedListItem: (
         itemsBounds.push(UpperBounds);
         prevUpperBounds = UpperBounds;
       });
-      console.log(itemsBounds);
       const totalBounds = itemsBounds[itemsBounds.length - 1];
       const roll = Math.floor(Math.random() * totalBounds + 1);
 
@@ -39,10 +38,6 @@ const getRandomWeightedListItem: (
 
       const result = items[index].split('|')[1].trim();
       const text = `1d${totalBounds} = ${roll} : ${result}`;
-
-      console.log(
-        `roll ${roll}, index ${index}, ${items[index].split('|')[1]}`
-      );
 
       cb(text);
     })
