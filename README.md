@@ -77,17 +77,23 @@ Limitations: Currently does not handle spaces in dice notation e.g use {2d6,2d10
 
 Make sure `esbuild.config.mjs` is updated to output to `/build` folder.
 
-### Automatically copy files to vault
+### Automatically build and copy files to vault
 
-`copy.sh`:
+`build.sh` or `build.sh prod`:
 
 ```sh
 #!/bin/bash
 
-if [ $1="prod" ]
+ARG=$1
+
+npm run build
+
+if [ $ARG = 'prod' ];
 then
-    cp ./build/* '<path to prod vault>/.obsidian/plugins/napoleon'
+    cp ./build/* PathToYourRealVault/.obsidian/plugins/napoleon
+    echo "PROD BUILD COMPLETE"
 else
-    cp ./build/* '<path to dev vault>.obsidian/plugins/napoleon'
+    cp ./build/* PathToYourDevVault/.obsidian/plugins/napoleon
+    echo "DEV BUILD COMPLETE"
 fi
 ```
