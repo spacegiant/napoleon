@@ -9,7 +9,7 @@ const getRandomWeightedListItem: (
   file: any,
   cb: (value: string) => void
 ) => {
-  const offset = file.frontmatter.position.end.offset;
+  const offset = file.frontmatterPosition.end.offset;
   const path = app.metadataCache.getFirstLinkpathDest(file.name, file.path);
 
   if (path == null) return;
