@@ -44348,7 +44348,8 @@ var import_obsidian6 = __toModule(require("obsidian"));
 
 // src/utils/getRandomListItem.ts
 var getRandomListItem = (app2, file, cb) => __async(void 0, null, function* () {
-  const offset = file.frontmatter.position.end.offset;
+  console.log(file);
+  const offset = file.frontmatterPosition.end.offset;
   const path = app2.metadataCache.getFirstLinkpathDest(file.name, file.path);
   if (!path)
     return;
@@ -44371,7 +44372,6 @@ var registerSimpleRandomTable = (app2, table) => {
     const leaf = app2.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
     if (leaf) {
       if (!checking) {
-        console.log("simple");
         const mode2 = leaf.getState().mode;
         const isEditing = mode2 === "source";
         const view = app2.workspace.getActiveViewOfType(import_obsidian6.MarkdownView);
@@ -44380,7 +44380,6 @@ var registerSimpleRandomTable = (app2, table) => {
           const doc = editor.getDoc();
           const cursor = doc.getCursor();
           getRandomListItem_default(app2, table, (content) => {
-            console.log(content);
             const string3 = content;
             doc.replaceRange(string3, cursor);
             doc.focus();
@@ -44400,7 +44399,7 @@ var import_obsidian7 = __toModule(require("obsidian"));
 
 // src/utils/getRandomWeightedListItem.ts
 var getRandomWeightedListItem = (app2, file, cb) => __async(void 0, null, function* () {
-  const offset = file.frontmatter.position.end.offset;
+  const offset = file.frontmatterPosition.end.offset;
   const path = app2.metadataCache.getFirstLinkpathDest(file.name, file.path);
   if (path == null)
     return;
@@ -44415,7 +44414,6 @@ var getRandomWeightedListItem = (app2, file, cb) => __async(void 0, null, functi
       itemsBounds.push(UpperBounds);
       prevUpperBounds = UpperBounds;
     });
-    console.log(itemsBounds);
     const totalBounds = itemsBounds[itemsBounds.length - 1];
     const roll = Math.floor(Math.random() * totalBounds + 1);
     const index2 = itemsBounds.findIndex((upperBounds) => {
@@ -44423,7 +44421,6 @@ var getRandomWeightedListItem = (app2, file, cb) => __async(void 0, null, functi
     });
     const result = items[index2].split("|")[1].trim();
     const text = `1d${totalBounds} = ${roll} : ${result}`;
-    console.log(`roll ${roll}, index ${index2}, ${items[index2].split("|")[1]}`);
     cb(text);
   }).catch((error) => {
     console.log(error);

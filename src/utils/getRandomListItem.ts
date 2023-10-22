@@ -9,7 +9,9 @@ const getRandomListItem: (
   file: any,
   cb: (value: string) => void
 ) => {
-  const offset = file.frontmatter.position.end.offset;
+  console.log(file);
+  const offset = file.frontmatterPosition.end.offset;
+  // console.log("TYPEOF = ", typeof file);
   const path = app.metadataCache.getFirstLinkpathDest(file.name, file.path);
   if (!path) return;
   await app.vault
