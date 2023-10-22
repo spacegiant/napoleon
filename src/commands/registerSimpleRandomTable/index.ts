@@ -1,5 +1,5 @@
 import { type App, MarkdownView } from 'obsidian';
-import getRandomListItem from '../../utils/getRandomListItem';
+import getRandomItem from 'src/utils/getRandomItem';
 
 // TODO: Fix table: any
 const registerSimpleRandomTable = (app: App, table: any) => {
@@ -17,7 +17,7 @@ const registerSimpleRandomTable = (app: App, table: any) => {
           const doc = editor.getDoc();
           const cursor = doc.getCursor();
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          getRandomListItem(app, table, (content: string) => {
+          getRandomItem(app, table, (content: string) => {
             const string = content;
             doc.replaceRange(string, cursor);
             doc.focus();
