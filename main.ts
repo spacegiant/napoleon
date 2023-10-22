@@ -11,14 +11,7 @@ import {
 } from './src/commands';
 
 import { MyPluginSettings } from 'src/types';
-
-const DEFAULT_SETTINGS: MyPluginSettings = {
-  mySetting: 'default',
-  mythicOn: true,
-  tacOn: false,
-  replacer: false,
-  replacerSuffix: '//',
-};
+import { DEFAULT_SETTINGS } from 'src/constants';
 
 export default class MyPlugin extends Plugin {
   settings: MyPluginSettings;

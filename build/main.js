@@ -44459,7 +44459,7 @@ var registerWeightedRandomTable = (app2, table) => {
 };
 var registerWeightedRandomTable_default = registerWeightedRandomTable;
 
-// main.ts
+// src/constants.ts
 var DEFAULT_SETTINGS = {
   mySetting: "default",
   mythicOn: true,
@@ -44467,6 +44467,8 @@ var DEFAULT_SETTINGS = {
   replacer: false,
   replacerSuffix: "//"
 };
+
+// main.ts
 var MyPlugin = class extends import_obsidian8.Plugin {
   onload() {
     return __async(this, null, function* () {
