@@ -10,13 +10,7 @@ import {
   registerWeightedRandomTable,
 } from './src/commands';
 
-interface MyPluginSettings {
-  mySetting: string;
-  mythicOn: boolean;
-  tacOn: boolean;
-  replacer: boolean;
-  replacerSuffix: string;
-}
+import { MyPluginSettings } from 'src/types';
 
 const DEFAULT_SETTINGS: MyPluginSettings = {
   mySetting: 'default',

@@ -911,7 +911,7 @@ var require_complex = __commonJS({
         b = b / 2;
         return 0.5 * Math.log(a * a + b * b) + Math.LN2;
       }
-      var parse2 = function(a, b) {
+      var parse3 = function(a, b) {
         var z = { "re": 0, "im": 0 };
         if (a === void 0 || a === null) {
           z["re"] = z["im"] = 0;
@@ -1001,7 +1001,7 @@ var require_complex = __commonJS({
         if (!(this instanceof Complex3)) {
           return new Complex3(a, b);
         }
-        var z = parse2(a, b);
+        var z = parse3(a, b);
         this["re"] = z["re"];
         this["im"] = z["im"];
       }
@@ -1458,523 +1458,6 @@ var require_complex = __commonJS({
         module2["exports"] = Complex3;
       } else {
         root["Complex"] = Complex3;
-      }
-    })(exports);
-  }
-});
-
-// node_modules/fraction.js/fraction.js
-var require_fraction = __commonJS({
-  "node_modules/fraction.js/fraction.js"(exports, module2) {
-    (function(root) {
-      "use strict";
-      var MAX_CYCLE_LEN = 2e3;
-      var P3 = {
-        "s": 1,
-        "n": 0,
-        "d": 1
-      };
-      function assign2(n, s) {
-        if (isNaN(n = parseInt(n, 10))) {
-          throw Fraction3["InvalidParameter"];
-        }
-        return n * s;
-      }
-      function newFraction(n, d) {
-        if (d === 0) {
-          throw Fraction3["DivisionByZero"];
-        }
-        var f = Object.create(Fraction3.prototype);
-        f["s"] = n < 0 ? -1 : 1;
-        n = n < 0 ? -n : n;
-        var a = gcd2(n, d);
-        f["n"] = n / a;
-        f["d"] = d / a;
-        return f;
-      }
-      function factorize(num) {
-        var factors = {};
-        var n = num;
-        var i2 = 2;
-        var s = 4;
-        while (s <= n) {
-          while (n % i2 === 0) {
-            n /= i2;
-            factors[i2] = (factors[i2] || 0) + 1;
-          }
-          s += 1 + 2 * i2++;
-        }
-        if (n !== num) {
-          if (n > 1)
-            factors[n] = (factors[n] || 0) + 1;
-        } else {
-          factors[num] = (factors[num] || 0) + 1;
-        }
-        return factors;
-      }
-      var parse2 = function(p1, p2) {
-        var n = 0, d = 1, s = 1;
-        var v = 0, w = 0, x = 0, y = 1, z = 1;
-        var A2 = 0, B = 1;
-        var C = 1, D = 1;
-        var N = 1e7;
-        var M2;
-        if (p1 === void 0 || p1 === null) {
-        } else if (p2 !== void 0) {
-          n = p1;
-          d = p2;
-          s = n * d;
-          if (n % 1 !== 0 || d % 1 !== 0) {
-            throw Fraction3["NonIntegerParameter"];
-          }
-        } else
-          switch (typeof p1) {
-            case "object": {
-              if ("d" in p1 && "n" in p1) {
-                n = p1["n"];
-                d = p1["d"];
-                if ("s" in p1)
-                  n *= p1["s"];
-              } else if (0 in p1) {
-                n = p1[0];
-                if (1 in p1)
-                  d = p1[1];
-              } else {
-                throw Fraction3["InvalidParameter"];
-              }
-              s = n * d;
-              break;
-            }
-            case "number": {
-              if (p1 < 0) {
-                s = p1;
-                p1 = -p1;
-              }
-              if (p1 % 1 === 0) {
-                n = p1;
-              } else if (p1 > 0) {
-                if (p1 >= 1) {
-                  z = Math.pow(10, Math.floor(1 + Math.log(p1) / Math.LN10));
-                  p1 /= z;
-                }
-                while (B <= N && D <= N) {
-                  M2 = (A2 + C) / (B + D);
-                  if (p1 === M2) {
-                    if (B + D <= N) {
-                      n = A2 + C;
-                      d = B + D;
-                    } else if (D > B) {
-                      n = C;
-                      d = D;
-                    } else {
-                      n = A2;
-                      d = B;
-                    }
-                    break;
-                  } else {
-                    if (p1 > M2) {
-                      A2 += C;
-                      B += D;
-                    } else {
-                      C += A2;
-                      D += B;
-                    }
-                    if (B > N) {
-                      n = C;
-                      d = D;
-                    } else {
-                      n = A2;
-                      d = B;
-                    }
-                  }
-                }
-                n *= z;
-              } else if (isNaN(p1) || isNaN(p2)) {
-                d = n = NaN;
-              }
-              break;
-            }
-            case "string": {
-              B = p1.match(/\d+|./g);
-              if (B === null)
-                throw Fraction3["InvalidParameter"];
-              if (B[A2] === "-") {
-                s = -1;
-                A2++;
-              } else if (B[A2] === "+") {
-                A2++;
-              }
-              if (B.length === A2 + 1) {
-                w = assign2(B[A2++], s);
-              } else if (B[A2 + 1] === "." || B[A2] === ".") {
-                if (B[A2] !== ".") {
-                  v = assign2(B[A2++], s);
-                }
-                A2++;
-                if (A2 + 1 === B.length || B[A2 + 1] === "(" && B[A2 + 3] === ")" || B[A2 + 1] === "'" && B[A2 + 3] === "'") {
-                  w = assign2(B[A2], s);
-                  y = Math.pow(10, B[A2].length);
-                  A2++;
-                }
-                if (B[A2] === "(" && B[A2 + 2] === ")" || B[A2] === "'" && B[A2 + 2] === "'") {
-                  x = assign2(B[A2 + 1], s);
-                  z = Math.pow(10, B[A2 + 1].length) - 1;
-                  A2 += 3;
-                }
-              } else if (B[A2 + 1] === "/" || B[A2 + 1] === ":") {
-                w = assign2(B[A2], s);
-                y = assign2(B[A2 + 2], 1);
-                A2 += 3;
-              } else if (B[A2 + 3] === "/" && B[A2 + 1] === " ") {
-                v = assign2(B[A2], s);
-                w = assign2(B[A2 + 2], s);
-                y = assign2(B[A2 + 4], 1);
-                A2 += 5;
-              }
-              if (B.length <= A2) {
-                d = y * z;
-                s = n = x + d * v + z * w;
-                break;
-              }
-            }
-            default:
-              throw Fraction3["InvalidParameter"];
-          }
-        if (d === 0) {
-          throw Fraction3["DivisionByZero"];
-        }
-        P3["s"] = s < 0 ? -1 : 1;
-        P3["n"] = Math.abs(n);
-        P3["d"] = Math.abs(d);
-      };
-      function modpow(b, e3, m) {
-        var r = 1;
-        for (; e3 > 0; b = b * b % m, e3 >>= 1) {
-          if (e3 & 1) {
-            r = r * b % m;
-          }
-        }
-        return r;
-      }
-      function cycleLen(n, d) {
-        for (; d % 2 === 0; d /= 2) {
-        }
-        for (; d % 5 === 0; d /= 5) {
-        }
-        if (d === 1)
-          return 0;
-        var rem = 10 % d;
-        var t = 1;
-        for (; rem !== 1; t++) {
-          rem = rem * 10 % d;
-          if (t > MAX_CYCLE_LEN)
-            return 0;
-        }
-        return t;
-      }
-      function cycleStart(n, d, len) {
-        var rem1 = 1;
-        var rem2 = modpow(10, len, d);
-        for (var t = 0; t < 300; t++) {
-          if (rem1 === rem2)
-            return t;
-          rem1 = rem1 * 10 % d;
-          rem2 = rem2 * 10 % d;
-        }
-        return 0;
-      }
-      function gcd2(a, b) {
-        if (!a)
-          return b;
-        if (!b)
-          return a;
-        while (1) {
-          a %= b;
-          if (!a)
-            return b;
-          b %= a;
-          if (!b)
-            return a;
-        }
-      }
-      ;
-      function Fraction3(a, b) {
-        parse2(a, b);
-        if (this instanceof Fraction3) {
-          a = gcd2(P3["d"], P3["n"]);
-          this["s"] = P3["s"];
-          this["n"] = P3["n"] / a;
-          this["d"] = P3["d"] / a;
-        } else {
-          return newFraction(P3["s"] * P3["n"], P3["d"]);
-        }
-      }
-      Fraction3["DivisionByZero"] = new Error("Division by Zero");
-      Fraction3["InvalidParameter"] = new Error("Invalid argument");
-      Fraction3["NonIntegerParameter"] = new Error("Parameters must be integer");
-      Fraction3.prototype = {
-        "s": 1,
-        "n": 0,
-        "d": 1,
-        "abs": function() {
-          return newFraction(this["n"], this["d"]);
-        },
-        "neg": function() {
-          return newFraction(-this["s"] * this["n"], this["d"]);
-        },
-        "add": function(a, b) {
-          parse2(a, b);
-          return newFraction(this["s"] * this["n"] * P3["d"] + P3["s"] * this["d"] * P3["n"], this["d"] * P3["d"]);
-        },
-        "sub": function(a, b) {
-          parse2(a, b);
-          return newFraction(this["s"] * this["n"] * P3["d"] - P3["s"] * this["d"] * P3["n"], this["d"] * P3["d"]);
-        },
-        "mul": function(a, b) {
-          parse2(a, b);
-          return newFraction(this["s"] * P3["s"] * this["n"] * P3["n"], this["d"] * P3["d"]);
-        },
-        "div": function(a, b) {
-          parse2(a, b);
-          return newFraction(this["s"] * P3["s"] * this["n"] * P3["d"], this["d"] * P3["n"]);
-        },
-        "clone": function() {
-          return newFraction(this["s"] * this["n"], this["d"]);
-        },
-        "mod": function(a, b) {
-          if (isNaN(this["n"]) || isNaN(this["d"])) {
-            return new Fraction3(NaN);
-          }
-          if (a === void 0) {
-            return newFraction(this["s"] * this["n"] % this["d"], 1);
-          }
-          parse2(a, b);
-          if (P3["n"] === 0 && this["d"] === 0) {
-            throw Fraction3["DivisionByZero"];
-          }
-          return newFraction(this["s"] * (P3["d"] * this["n"]) % (P3["n"] * this["d"]), P3["d"] * this["d"]);
-        },
-        "gcd": function(a, b) {
-          parse2(a, b);
-          return newFraction(gcd2(P3["n"], this["n"]) * gcd2(P3["d"], this["d"]), P3["d"] * this["d"]);
-        },
-        "lcm": function(a, b) {
-          parse2(a, b);
-          if (P3["n"] === 0 && this["n"] === 0) {
-            return newFraction(0, 1);
-          }
-          return newFraction(P3["n"] * this["n"], gcd2(P3["n"], this["n"]) * gcd2(P3["d"], this["d"]));
-        },
-        "ceil": function(places) {
-          places = Math.pow(10, places || 0);
-          if (isNaN(this["n"]) || isNaN(this["d"])) {
-            return new Fraction3(NaN);
-          }
-          return newFraction(Math.ceil(places * this["s"] * this["n"] / this["d"]), places);
-        },
-        "floor": function(places) {
-          places = Math.pow(10, places || 0);
-          if (isNaN(this["n"]) || isNaN(this["d"])) {
-            return new Fraction3(NaN);
-          }
-          return newFraction(Math.floor(places * this["s"] * this["n"] / this["d"]), places);
-        },
-        "round": function(places) {
-          places = Math.pow(10, places || 0);
-          if (isNaN(this["n"]) || isNaN(this["d"])) {
-            return new Fraction3(NaN);
-          }
-          return newFraction(Math.round(places * this["s"] * this["n"] / this["d"]), places);
-        },
-        "inverse": function() {
-          return newFraction(this["s"] * this["d"], this["n"]);
-        },
-        "pow": function(a, b) {
-          parse2(a, b);
-          if (P3["d"] === 1) {
-            if (P3["s"] < 0) {
-              return newFraction(Math.pow(this["s"] * this["d"], P3["n"]), Math.pow(this["n"], P3["n"]));
-            } else {
-              return newFraction(Math.pow(this["s"] * this["n"], P3["n"]), Math.pow(this["d"], P3["n"]));
-            }
-          }
-          if (this["s"] < 0)
-            return null;
-          var N = factorize(this["n"]);
-          var D = factorize(this["d"]);
-          var n = 1;
-          var d = 1;
-          for (var k in N) {
-            if (k === "1")
-              continue;
-            if (k === "0") {
-              n = 0;
-              break;
-            }
-            N[k] *= P3["n"];
-            if (N[k] % P3["d"] === 0) {
-              N[k] /= P3["d"];
-            } else
-              return null;
-            n *= Math.pow(k, N[k]);
-          }
-          for (var k in D) {
-            if (k === "1")
-              continue;
-            D[k] *= P3["n"];
-            if (D[k] % P3["d"] === 0) {
-              D[k] /= P3["d"];
-            } else
-              return null;
-            d *= Math.pow(k, D[k]);
-          }
-          if (P3["s"] < 0) {
-            return newFraction(d, n);
-          }
-          return newFraction(n, d);
-        },
-        "equals": function(a, b) {
-          parse2(a, b);
-          return this["s"] * this["n"] * P3["d"] === P3["s"] * P3["n"] * this["d"];
-        },
-        "compare": function(a, b) {
-          parse2(a, b);
-          var t = this["s"] * this["n"] * P3["d"] - P3["s"] * P3["n"] * this["d"];
-          return (0 < t) - (t < 0);
-        },
-        "simplify": function(eps) {
-          if (isNaN(this["n"]) || isNaN(this["d"])) {
-            return this;
-          }
-          eps = eps || 1e-3;
-          var thisABS = this["abs"]();
-          var cont = thisABS["toContinued"]();
-          for (var i2 = 1; i2 < cont.length; i2++) {
-            var s = newFraction(cont[i2 - 1], 1);
-            for (var k = i2 - 2; k >= 0; k--) {
-              s = s["inverse"]()["add"](cont[k]);
-            }
-            if (s["sub"](thisABS)["abs"]().valueOf() < eps) {
-              return s["mul"](this["s"]);
-            }
-          }
-          return this;
-        },
-        "divisible": function(a, b) {
-          parse2(a, b);
-          return !(!(P3["n"] * this["d"]) || this["n"] * P3["d"] % (P3["n"] * this["d"]));
-        },
-        "valueOf": function() {
-          return this["s"] * this["n"] / this["d"];
-        },
-        "toFraction": function(excludeWhole) {
-          var whole, str = "";
-          var n = this["n"];
-          var d = this["d"];
-          if (this["s"] < 0) {
-            str += "-";
-          }
-          if (d === 1) {
-            str += n;
-          } else {
-            if (excludeWhole && (whole = Math.floor(n / d)) > 0) {
-              str += whole;
-              str += " ";
-              n %= d;
-            }
-            str += n;
-            str += "/";
-            str += d;
-          }
-          return str;
-        },
-        "toLatex": function(excludeWhole) {
-          var whole, str = "";
-          var n = this["n"];
-          var d = this["d"];
-          if (this["s"] < 0) {
-            str += "-";
-          }
-          if (d === 1) {
-            str += n;
-          } else {
-            if (excludeWhole && (whole = Math.floor(n / d)) > 0) {
-              str += whole;
-              n %= d;
-            }
-            str += "\\frac{";
-            str += n;
-            str += "}{";
-            str += d;
-            str += "}";
-          }
-          return str;
-        },
-        "toContinued": function() {
-          var t;
-          var a = this["n"];
-          var b = this["d"];
-          var res = [];
-          if (isNaN(a) || isNaN(b)) {
-            return res;
-          }
-          do {
-            res.push(Math.floor(a / b));
-            t = a % b;
-            a = b;
-            b = t;
-          } while (a !== 1);
-          return res;
-        },
-        "toString": function(dec) {
-          var N = this["n"];
-          var D = this["d"];
-          if (isNaN(N) || isNaN(D)) {
-            return "NaN";
-          }
-          dec = dec || 15;
-          var cycLen = cycleLen(N, D);
-          var cycOff = cycleStart(N, D, cycLen);
-          var str = this["s"] < 0 ? "-" : "";
-          str += N / D | 0;
-          N %= D;
-          N *= 10;
-          if (N)
-            str += ".";
-          if (cycLen) {
-            for (var i2 = cycOff; i2--; ) {
-              str += N / D | 0;
-              N %= D;
-              N *= 10;
-            }
-            str += "(";
-            for (var i2 = cycLen; i2--; ) {
-              str += N / D | 0;
-              N %= D;
-              N *= 10;
-            }
-            str += ")";
-          } else {
-            for (var i2 = dec; N && i2--; ) {
-              str += N / D | 0;
-              N %= D;
-              N *= 10;
-            }
-          }
-          return str;
-        }
-      };
-      if (typeof define === "function" && define["amd"]) {
-        define([], function() {
-          return Fraction3;
-        });
-      } else if (typeof exports === "object") {
-        Object.defineProperty(Fraction3, "__esModule", { "value": true });
-        Fraction3["default"] = Fraction3;
-        Fraction3["Fraction"] = Fraction3;
-        module2["exports"] = Fraction3;
-      } else {
-        root["Fraction"] = Fraction3;
       }
     })(exports);
   }
@@ -7027,24 +6510,530 @@ var createComplexClass = /* @__PURE__ */ factory(name3, dependencies4, () => {
   isClass: true
 });
 
+// node_modules/fraction.js/fraction.js
+var MAX_CYCLE_LEN = 2e3;
+var P2 = {
+  "s": 1,
+  "n": 0,
+  "d": 1
+};
+function assign2(n, s) {
+  if (isNaN(n = parseInt(n, 10))) {
+    throw InvalidParameter();
+  }
+  return n * s;
+}
+function newFraction(n, d) {
+  if (d === 0) {
+    throw DivisionByZero();
+  }
+  var f = Object.create(Fraction.prototype);
+  f["s"] = n < 0 ? -1 : 1;
+  n = n < 0 ? -n : n;
+  var a = gcd(n, d);
+  f["n"] = n / a;
+  f["d"] = d / a;
+  return f;
+}
+function factorize(num) {
+  var factors = {};
+  var n = num;
+  var i2 = 2;
+  var s = 4;
+  while (s <= n) {
+    while (n % i2 === 0) {
+      n /= i2;
+      factors[i2] = (factors[i2] || 0) + 1;
+    }
+    s += 1 + 2 * i2++;
+  }
+  if (n !== num) {
+    if (n > 1)
+      factors[n] = (factors[n] || 0) + 1;
+  } else {
+    factors[num] = (factors[num] || 0) + 1;
+  }
+  return factors;
+}
+var parse = function(p1, p2) {
+  var n = 0, d = 1, s = 1;
+  var v = 0, w = 0, x = 0, y = 1, z = 1;
+  var A2 = 0, B = 1;
+  var C = 1, D = 1;
+  var N = 1e7;
+  var M2;
+  if (p1 === void 0 || p1 === null) {
+  } else if (p2 !== void 0) {
+    n = p1;
+    d = p2;
+    s = n * d;
+    if (n % 1 !== 0 || d % 1 !== 0) {
+      throw NonIntegerParameter();
+    }
+  } else
+    switch (typeof p1) {
+      case "object": {
+        if ("d" in p1 && "n" in p1) {
+          n = p1["n"];
+          d = p1["d"];
+          if ("s" in p1)
+            n *= p1["s"];
+        } else if (0 in p1) {
+          n = p1[0];
+          if (1 in p1)
+            d = p1[1];
+        } else {
+          throw InvalidParameter();
+        }
+        s = n * d;
+        break;
+      }
+      case "number": {
+        if (p1 < 0) {
+          s = p1;
+          p1 = -p1;
+        }
+        if (p1 % 1 === 0) {
+          n = p1;
+        } else if (p1 > 0) {
+          if (p1 >= 1) {
+            z = Math.pow(10, Math.floor(1 + Math.log(p1) / Math.LN10));
+            p1 /= z;
+          }
+          while (B <= N && D <= N) {
+            M2 = (A2 + C) / (B + D);
+            if (p1 === M2) {
+              if (B + D <= N) {
+                n = A2 + C;
+                d = B + D;
+              } else if (D > B) {
+                n = C;
+                d = D;
+              } else {
+                n = A2;
+                d = B;
+              }
+              break;
+            } else {
+              if (p1 > M2) {
+                A2 += C;
+                B += D;
+              } else {
+                C += A2;
+                D += B;
+              }
+              if (B > N) {
+                n = C;
+                d = D;
+              } else {
+                n = A2;
+                d = B;
+              }
+            }
+          }
+          n *= z;
+        } else if (isNaN(p1) || isNaN(p2)) {
+          d = n = NaN;
+        }
+        break;
+      }
+      case "string": {
+        B = p1.match(/\d+|./g);
+        if (B === null)
+          throw InvalidParameter();
+        if (B[A2] === "-") {
+          s = -1;
+          A2++;
+        } else if (B[A2] === "+") {
+          A2++;
+        }
+        if (B.length === A2 + 1) {
+          w = assign2(B[A2++], s);
+        } else if (B[A2 + 1] === "." || B[A2] === ".") {
+          if (B[A2] !== ".") {
+            v = assign2(B[A2++], s);
+          }
+          A2++;
+          if (A2 + 1 === B.length || B[A2 + 1] === "(" && B[A2 + 3] === ")" || B[A2 + 1] === "'" && B[A2 + 3] === "'") {
+            w = assign2(B[A2], s);
+            y = Math.pow(10, B[A2].length);
+            A2++;
+          }
+          if (B[A2] === "(" && B[A2 + 2] === ")" || B[A2] === "'" && B[A2 + 2] === "'") {
+            x = assign2(B[A2 + 1], s);
+            z = Math.pow(10, B[A2 + 1].length) - 1;
+            A2 += 3;
+          }
+        } else if (B[A2 + 1] === "/" || B[A2 + 1] === ":") {
+          w = assign2(B[A2], s);
+          y = assign2(B[A2 + 2], 1);
+          A2 += 3;
+        } else if (B[A2 + 3] === "/" && B[A2 + 1] === " ") {
+          v = assign2(B[A2], s);
+          w = assign2(B[A2 + 2], s);
+          y = assign2(B[A2 + 4], 1);
+          A2 += 5;
+        }
+        if (B.length <= A2) {
+          d = y * z;
+          s = n = x + d * v + z * w;
+          break;
+        }
+      }
+      default:
+        throw InvalidParameter();
+    }
+  if (d === 0) {
+    throw DivisionByZero();
+  }
+  P2["s"] = s < 0 ? -1 : 1;
+  P2["n"] = Math.abs(n);
+  P2["d"] = Math.abs(d);
+};
+function modpow(b, e3, m) {
+  var r = 1;
+  for (; e3 > 0; b = b * b % m, e3 >>= 1) {
+    if (e3 & 1) {
+      r = r * b % m;
+    }
+  }
+  return r;
+}
+function cycleLen(n, d) {
+  for (; d % 2 === 0; d /= 2) {
+  }
+  for (; d % 5 === 0; d /= 5) {
+  }
+  if (d === 1)
+    return 0;
+  var rem = 10 % d;
+  var t = 1;
+  for (; rem !== 1; t++) {
+    rem = rem * 10 % d;
+    if (t > MAX_CYCLE_LEN)
+      return 0;
+  }
+  return t;
+}
+function cycleStart(n, d, len) {
+  var rem1 = 1;
+  var rem2 = modpow(10, len, d);
+  for (var t = 0; t < 300; t++) {
+    if (rem1 === rem2)
+      return t;
+    rem1 = rem1 * 10 % d;
+    rem2 = rem2 * 10 % d;
+  }
+  return 0;
+}
+function gcd(a, b) {
+  if (!a)
+    return b;
+  if (!b)
+    return a;
+  while (1) {
+    a %= b;
+    if (!a)
+      return b;
+    b %= a;
+    if (!b)
+      return a;
+  }
+}
+function Fraction(a, b) {
+  parse(a, b);
+  if (this instanceof Fraction) {
+    a = gcd(P2["d"], P2["n"]);
+    this["s"] = P2["s"];
+    this["n"] = P2["n"] / a;
+    this["d"] = P2["d"] / a;
+  } else {
+    return newFraction(P2["s"] * P2["n"], P2["d"]);
+  }
+}
+var DivisionByZero = function() {
+  return new Error("Division by Zero");
+};
+var InvalidParameter = function() {
+  return new Error("Invalid argument");
+};
+var NonIntegerParameter = function() {
+  return new Error("Parameters must be integer");
+};
+Fraction.prototype = {
+  "s": 1,
+  "n": 0,
+  "d": 1,
+  "abs": function() {
+    return newFraction(this["n"], this["d"]);
+  },
+  "neg": function() {
+    return newFraction(-this["s"] * this["n"], this["d"]);
+  },
+  "add": function(a, b) {
+    parse(a, b);
+    return newFraction(this["s"] * this["n"] * P2["d"] + P2["s"] * this["d"] * P2["n"], this["d"] * P2["d"]);
+  },
+  "sub": function(a, b) {
+    parse(a, b);
+    return newFraction(this["s"] * this["n"] * P2["d"] - P2["s"] * this["d"] * P2["n"], this["d"] * P2["d"]);
+  },
+  "mul": function(a, b) {
+    parse(a, b);
+    return newFraction(this["s"] * P2["s"] * this["n"] * P2["n"], this["d"] * P2["d"]);
+  },
+  "div": function(a, b) {
+    parse(a, b);
+    return newFraction(this["s"] * P2["s"] * this["n"] * P2["d"], this["d"] * P2["n"]);
+  },
+  "clone": function() {
+    return newFraction(this["s"] * this["n"], this["d"]);
+  },
+  "mod": function(a, b) {
+    if (isNaN(this["n"]) || isNaN(this["d"])) {
+      return new Fraction(NaN);
+    }
+    if (a === void 0) {
+      return newFraction(this["s"] * this["n"] % this["d"], 1);
+    }
+    parse(a, b);
+    if (P2["n"] === 0 && this["d"] === 0) {
+      throw DivisionByZero();
+    }
+    return newFraction(this["s"] * (P2["d"] * this["n"]) % (P2["n"] * this["d"]), P2["d"] * this["d"]);
+  },
+  "gcd": function(a, b) {
+    parse(a, b);
+    return newFraction(gcd(P2["n"], this["n"]) * gcd(P2["d"], this["d"]), P2["d"] * this["d"]);
+  },
+  "lcm": function(a, b) {
+    parse(a, b);
+    if (P2["n"] === 0 && this["n"] === 0) {
+      return newFraction(0, 1);
+    }
+    return newFraction(P2["n"] * this["n"], gcd(P2["n"], this["n"]) * gcd(P2["d"], this["d"]));
+  },
+  "ceil": function(places) {
+    places = Math.pow(10, places || 0);
+    if (isNaN(this["n"]) || isNaN(this["d"])) {
+      return new Fraction(NaN);
+    }
+    return newFraction(Math.ceil(places * this["s"] * this["n"] / this["d"]), places);
+  },
+  "floor": function(places) {
+    places = Math.pow(10, places || 0);
+    if (isNaN(this["n"]) || isNaN(this["d"])) {
+      return new Fraction(NaN);
+    }
+    return newFraction(Math.floor(places * this["s"] * this["n"] / this["d"]), places);
+  },
+  "round": function(places) {
+    places = Math.pow(10, places || 0);
+    if (isNaN(this["n"]) || isNaN(this["d"])) {
+      return new Fraction(NaN);
+    }
+    return newFraction(Math.round(places * this["s"] * this["n"] / this["d"]), places);
+  },
+  "roundTo": function(a, b) {
+    parse(a, b);
+    return newFraction(this["s"] * Math.round(this["n"] * P2["d"] / (this["d"] * P2["n"])) * P2["n"], P2["d"]);
+  },
+  "inverse": function() {
+    return newFraction(this["s"] * this["d"], this["n"]);
+  },
+  "pow": function(a, b) {
+    parse(a, b);
+    if (P2["d"] === 1) {
+      if (P2["s"] < 0) {
+        return newFraction(Math.pow(this["s"] * this["d"], P2["n"]), Math.pow(this["n"], P2["n"]));
+      } else {
+        return newFraction(Math.pow(this["s"] * this["n"], P2["n"]), Math.pow(this["d"], P2["n"]));
+      }
+    }
+    if (this["s"] < 0)
+      return null;
+    var N = factorize(this["n"]);
+    var D = factorize(this["d"]);
+    var n = 1;
+    var d = 1;
+    for (var k in N) {
+      if (k === "1")
+        continue;
+      if (k === "0") {
+        n = 0;
+        break;
+      }
+      N[k] *= P2["n"];
+      if (N[k] % P2["d"] === 0) {
+        N[k] /= P2["d"];
+      } else
+        return null;
+      n *= Math.pow(k, N[k]);
+    }
+    for (var k in D) {
+      if (k === "1")
+        continue;
+      D[k] *= P2["n"];
+      if (D[k] % P2["d"] === 0) {
+        D[k] /= P2["d"];
+      } else
+        return null;
+      d *= Math.pow(k, D[k]);
+    }
+    if (P2["s"] < 0) {
+      return newFraction(d, n);
+    }
+    return newFraction(n, d);
+  },
+  "equals": function(a, b) {
+    parse(a, b);
+    return this["s"] * this["n"] * P2["d"] === P2["s"] * P2["n"] * this["d"];
+  },
+  "compare": function(a, b) {
+    parse(a, b);
+    var t = this["s"] * this["n"] * P2["d"] - P2["s"] * P2["n"] * this["d"];
+    return (0 < t) - (t < 0);
+  },
+  "simplify": function(eps) {
+    if (isNaN(this["n"]) || isNaN(this["d"])) {
+      return this;
+    }
+    eps = eps || 1e-3;
+    var thisABS = this["abs"]();
+    var cont = thisABS["toContinued"]();
+    for (var i2 = 1; i2 < cont.length; i2++) {
+      var s = newFraction(cont[i2 - 1], 1);
+      for (var k = i2 - 2; k >= 0; k--) {
+        s = s["inverse"]()["add"](cont[k]);
+      }
+      if (Math.abs(s["sub"](thisABS).valueOf()) < eps) {
+        return s["mul"](this["s"]);
+      }
+    }
+    return this;
+  },
+  "divisible": function(a, b) {
+    parse(a, b);
+    return !(!(P2["n"] * this["d"]) || this["n"] * P2["d"] % (P2["n"] * this["d"]));
+  },
+  "valueOf": function() {
+    return this["s"] * this["n"] / this["d"];
+  },
+  "toFraction": function(excludeWhole) {
+    var whole, str = "";
+    var n = this["n"];
+    var d = this["d"];
+    if (this["s"] < 0) {
+      str += "-";
+    }
+    if (d === 1) {
+      str += n;
+    } else {
+      if (excludeWhole && (whole = Math.floor(n / d)) > 0) {
+        str += whole;
+        str += " ";
+        n %= d;
+      }
+      str += n;
+      str += "/";
+      str += d;
+    }
+    return str;
+  },
+  "toLatex": function(excludeWhole) {
+    var whole, str = "";
+    var n = this["n"];
+    var d = this["d"];
+    if (this["s"] < 0) {
+      str += "-";
+    }
+    if (d === 1) {
+      str += n;
+    } else {
+      if (excludeWhole && (whole = Math.floor(n / d)) > 0) {
+        str += whole;
+        n %= d;
+      }
+      str += "\\frac{";
+      str += n;
+      str += "}{";
+      str += d;
+      str += "}";
+    }
+    return str;
+  },
+  "toContinued": function() {
+    var t;
+    var a = this["n"];
+    var b = this["d"];
+    var res = [];
+    if (isNaN(a) || isNaN(b)) {
+      return res;
+    }
+    do {
+      res.push(Math.floor(a / b));
+      t = a % b;
+      a = b;
+      b = t;
+    } while (a !== 1);
+    return res;
+  },
+  "toString": function(dec) {
+    var N = this["n"];
+    var D = this["d"];
+    if (isNaN(N) || isNaN(D)) {
+      return "NaN";
+    }
+    dec = dec || 15;
+    var cycLen = cycleLen(N, D);
+    var cycOff = cycleStart(N, D, cycLen);
+    var str = this["s"] < 0 ? "-" : "";
+    str += N / D | 0;
+    N %= D;
+    N *= 10;
+    if (N)
+      str += ".";
+    if (cycLen) {
+      for (var i2 = cycOff; i2--; ) {
+        str += N / D | 0;
+        N %= D;
+        N *= 10;
+      }
+      str += "(";
+      for (var i2 = cycLen; i2--; ) {
+        str += N / D | 0;
+        N %= D;
+        N *= 10;
+      }
+      str += ")";
+    } else {
+      for (var i2 = dec; N && i2--; ) {
+        str += N / D | 0;
+        N %= D;
+        N *= 10;
+      }
+    }
+    return str;
+  }
+};
+
 // node_modules/mathjs/lib/esm/type/fraction/Fraction.js
-var import_fraction = __toModule(require_fraction());
 var name4 = "Fraction";
 var dependencies5 = [];
 var createFractionClass = /* @__PURE__ */ factory(name4, dependencies5, () => {
-  import_fraction.default.prototype.type = "Fraction";
-  import_fraction.default.prototype.isFraction = true;
-  import_fraction.default.prototype.toJSON = function() {
+  Fraction.prototype.type = "Fraction";
+  Fraction.prototype.isFraction = true;
+  Fraction.prototype.toJSON = function() {
     return {
       mathjs: "Fraction",
       n: this.s * this.n,
       d: this.d
     };
   };
-  import_fraction.default.fromJSON = function(json) {
-    return new import_fraction.default(json);
+  Fraction.fromJSON = function(json) {
+    return new Fraction(json);
   };
-  return import_fraction.default;
+  return Fraction;
 }, {
   isClass: true
 });
@@ -15093,38 +15082,38 @@ var createErf = /* @__PURE__ */ factory(name106, dependencies107, (_ref) => {
   });
   function erf1(y) {
     var ysq = y * y;
-    var xnum = P2[0][4] * ysq;
+    var xnum = P3[0][4] * ysq;
     var xden = ysq;
     var i2;
     for (i2 = 0; i2 < 3; i2 += 1) {
-      xnum = (xnum + P2[0][i2]) * ysq;
+      xnum = (xnum + P3[0][i2]) * ysq;
       xden = (xden + Q[0][i2]) * ysq;
     }
-    return y * (xnum + P2[0][3]) / (xden + Q[0][3]);
+    return y * (xnum + P3[0][3]) / (xden + Q[0][3]);
   }
   function erfc2(y) {
-    var xnum = P2[1][8] * y;
+    var xnum = P3[1][8] * y;
     var xden = y;
     var i2;
     for (i2 = 0; i2 < 7; i2 += 1) {
-      xnum = (xnum + P2[1][i2]) * y;
+      xnum = (xnum + P3[1][i2]) * y;
       xden = (xden + Q[1][i2]) * y;
     }
-    var result = (xnum + P2[1][7]) / (xden + Q[1][7]);
+    var result = (xnum + P3[1][7]) / (xden + Q[1][7]);
     var ysq = parseInt(y * 16) / 16;
     var del = (y - ysq) * (y + ysq);
     return Math.exp(-ysq * ysq) * Math.exp(-del) * result;
   }
   function erfc3(y) {
     var ysq = 1 / (y * y);
-    var xnum = P2[2][5] * ysq;
+    var xnum = P3[2][5] * ysq;
     var xden = ysq;
     var i2;
     for (i2 = 0; i2 < 4; i2 += 1) {
-      xnum = (xnum + P2[2][i2]) * ysq;
+      xnum = (xnum + P3[2][i2]) * ysq;
       xden = (xden + Q[2][i2]) * ysq;
     }
-    var result = ysq * (xnum + P2[2][4]) / (xden + Q[2][4]);
+    var result = ysq * (xnum + P3[2][4]) / (xden + Q[2][4]);
     result = (SQRPI - result) / y;
     ysq = parseInt(y * 16) / 16;
     var del = (y - ysq) * (y + ysq);
@@ -15133,7 +15122,7 @@ var createErf = /* @__PURE__ */ factory(name106, dependencies107, (_ref) => {
 });
 var THRESH = 0.46875;
 var SQRPI = 0.5641895835477563;
-var P2 = [[3.1611237438705655, 113.86415415105016, 377.485237685302, 3209.3775891384694, 0.18577770618460315], [0.5641884969886701, 8.883149794388377, 66.11919063714163, 298.6351381974001, 881.952221241769, 1712.0476126340707, 2051.0783778260716, 1230.3393547979972, 21531153547440383e-24], [0.30532663496123236, 0.36034489994980445, 0.12578172611122926, 0.016083785148742275, 6587491615298378e-19, 0.016315387137302097]];
+var P3 = [[3.1611237438705655, 113.86415415105016, 377.485237685302, 3209.3775891384694, 0.18577770618460315], [0.5641884969886701, 8.883149794388377, 66.11919063714163, 298.6351381974001, 881.952221241769, 1712.0476126340707, 2051.0783778260716, 1230.3393547979972, 21531153547440383e-24], [0.30532663496123236, 0.36034489994980445, 0.12578172611122926, 0.016083785148742275, 6587491615298378e-19, 0.016315387137302097]];
 var Q = [[23.601290952344122, 244.02463793444417, 1282.6165260773723, 2844.236833439171], [15.744926110709835, 117.6939508913125, 537.1811018620099, 1621.3895745666903, 3290.7992357334597, 4362.619090143247, 3439.3676741437216, 1230.3393548037495], [2.568520192289822, 1.8729528499234604, 0.5279051029514285, 0.06051834131244132, 0.0023352049762686918]];
 var MAX_NUM = Math.pow(2, 53);
 
@@ -15663,13 +15652,13 @@ var createPow = /* @__PURE__ */ factory(name118, dependencies119, (_ref) => {
 });
 
 // node_modules/@babel/runtime/helpers/esm/typeof.js
-function _typeof(obj) {
+function _typeof(o) {
   "@babel/helpers - typeof";
-  return _typeof = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(obj2) {
-    return typeof obj2;
-  } : function(obj2) {
-    return obj2 && typeof Symbol == "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-  }, _typeof(obj);
+  return _typeof = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(o2) {
+    return typeof o2;
+  } : function(o2) {
+    return o2 && typeof Symbol == "function" && o2.constructor === Symbol && o2 !== Symbol.prototype ? "symbol" : typeof o2;
+  }, _typeof(o);
 }
 
 // node_modules/@babel/runtime/helpers/esm/toPrimitive.js
@@ -24131,7 +24120,7 @@ function assignFactory(_ref) {
     subset: subset2,
     matrix: matrix2
   } = _ref;
-  return function assign2(object, index2, value) {
+  return function assign3(object, index2, value) {
     try {
       if (Array.isArray(object)) {
         return matrix2(object).subset(index2, value).valueOf();
@@ -24380,7 +24369,7 @@ var createAssignmentNode = /* @__PURE__ */ factory(name201, dependencies202, (_r
   var access = accessFactory({
     subset: subset2
   });
-  var assign2 = assignFactory({
+  var assign3 = assignFactory({
     subset: subset2,
     matrix: matrix2
   });
@@ -24446,7 +24435,7 @@ var createAssignmentNode = /* @__PURE__ */ factory(name201, dependencies202, (_r
         var childObject = evalObject(scope, args, context);
         var value = evalValue(scope, args, context);
         var index2 = evalIndex(scope, args, childObject);
-        scope.set(name287, assign2(childObject, index2, value));
+        scope.set(name287, assign3(childObject, index2, value));
         return value;
       };
     } else {
@@ -24458,7 +24447,7 @@ var createAssignmentNode = /* @__PURE__ */ factory(name201, dependencies202, (_r
           var childObject = getSafeProperty(parent, parentProp);
           var index2 = evalIndex(scope, args, childObject);
           var value = evalValue(scope, args, context);
-          setSafeProperty(parent, parentProp, assign2(childObject, index2, value));
+          setSafeProperty(parent, parentProp, assign3(childObject, index2, value));
           return value;
         };
       } else {
@@ -24469,7 +24458,7 @@ var createAssignmentNode = /* @__PURE__ */ factory(name201, dependencies202, (_r
           var childObject = access(parent, parentIndex);
           var index2 = evalIndex(scope, args, childObject);
           var value = evalValue(scope, args, context);
-          assign2(parent, parentIndex, assign2(childObject, index2, value));
+          assign3(parent, parentIndex, assign3(childObject, index2, value));
           return value;
         };
       }
@@ -26846,7 +26835,7 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
     RelationalNode: RelationalNode2,
     SymbolNode: SymbolNode2
   } = _ref;
-  var parse2 = typed2(name214, {
+  var parse3 = typed2(name214, {
     string: function string3(expression) {
       return parseStart(expression, {});
     },
@@ -26960,7 +26949,7 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
     state.tokenType = TOKENTYPE.NULL;
     state.token = "";
     state.comment = "";
-    while (parse2.isWhitespace(currentCharacter(state), state.nestingLevel)) {
+    while (parse3.isWhitespace(currentCharacter(state), state.nestingLevel)) {
       next(state);
     }
     if (currentCharacter(state) === "#") {
@@ -27003,7 +26992,7 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
       next(state);
       return;
     }
-    if (parse2.isDigitDot(c1)) {
+    if (parse3.isDigitDot(c1)) {
       state.tokenType = TOKENTYPE.NUMBER;
       var _c = currentString(state, 2);
       if (_c === "0b" || _c === "0o" || _c === "0x") {
@@ -27011,21 +27000,21 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
         next(state);
         state.token += currentCharacter(state);
         next(state);
-        while (parse2.isHexDigit(currentCharacter(state))) {
+        while (parse3.isHexDigit(currentCharacter(state))) {
           state.token += currentCharacter(state);
           next(state);
         }
         if (currentCharacter(state) === ".") {
           state.token += ".";
           next(state);
-          while (parse2.isHexDigit(currentCharacter(state))) {
+          while (parse3.isHexDigit(currentCharacter(state))) {
             state.token += currentCharacter(state);
             next(state);
           }
         } else if (currentCharacter(state) === "i") {
           state.token += "i";
           next(state);
-          while (parse2.isDigit(currentCharacter(state))) {
+          while (parse3.isDigit(currentCharacter(state))) {
             state.token += currentCharacter(state);
             next(state);
           }
@@ -27035,40 +27024,40 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
       if (currentCharacter(state) === ".") {
         state.token += currentCharacter(state);
         next(state);
-        if (!parse2.isDigit(currentCharacter(state))) {
+        if (!parse3.isDigit(currentCharacter(state))) {
           state.tokenType = TOKENTYPE.DELIMITER;
           return;
         }
       } else {
-        while (parse2.isDigit(currentCharacter(state))) {
+        while (parse3.isDigit(currentCharacter(state))) {
           state.token += currentCharacter(state);
           next(state);
         }
-        if (parse2.isDecimalMark(currentCharacter(state), nextCharacter(state))) {
+        if (parse3.isDecimalMark(currentCharacter(state), nextCharacter(state))) {
           state.token += currentCharacter(state);
           next(state);
         }
       }
-      while (parse2.isDigit(currentCharacter(state))) {
+      while (parse3.isDigit(currentCharacter(state))) {
         state.token += currentCharacter(state);
         next(state);
       }
       if (currentCharacter(state) === "E" || currentCharacter(state) === "e") {
-        if (parse2.isDigit(nextCharacter(state)) || nextCharacter(state) === "-" || nextCharacter(state) === "+") {
+        if (parse3.isDigit(nextCharacter(state)) || nextCharacter(state) === "-" || nextCharacter(state) === "+") {
           state.token += currentCharacter(state);
           next(state);
           if (currentCharacter(state) === "+" || currentCharacter(state) === "-") {
             state.token += currentCharacter(state);
             next(state);
           }
-          if (!parse2.isDigit(currentCharacter(state))) {
+          if (!parse3.isDigit(currentCharacter(state))) {
             throw createSyntaxError(state, 'Digit expected, got "' + currentCharacter(state) + '"');
           }
-          while (parse2.isDigit(currentCharacter(state))) {
+          while (parse3.isDigit(currentCharacter(state))) {
             state.token += currentCharacter(state);
             next(state);
           }
-          if (parse2.isDecimalMark(currentCharacter(state), nextCharacter(state))) {
+          if (parse3.isDecimalMark(currentCharacter(state), nextCharacter(state))) {
             throw createSyntaxError(state, 'Digit expected, got "' + currentCharacter(state) + '"');
           }
         } else if (nextCharacter(state) === ".") {
@@ -27078,8 +27067,8 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
       }
       return;
     }
-    if (parse2.isAlpha(currentCharacter(state), prevCharacter(state), nextCharacter(state))) {
-      while (parse2.isAlpha(currentCharacter(state), prevCharacter(state), nextCharacter(state)) || parse2.isDigit(currentCharacter(state))) {
+    if (parse3.isAlpha(currentCharacter(state), prevCharacter(state), nextCharacter(state))) {
+      while (parse3.isAlpha(currentCharacter(state), prevCharacter(state), nextCharacter(state)) || parse3.isDigit(currentCharacter(state))) {
         state.token += currentCharacter(state);
         next(state);
       }
@@ -27108,28 +27097,28 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
   function closeParams(state) {
     state.nestingLevel--;
   }
-  parse2.isAlpha = function isAlpha(c, cPrev, cNext) {
-    return parse2.isValidLatinOrGreek(c) || parse2.isValidMathSymbol(c, cNext) || parse2.isValidMathSymbol(cPrev, c);
+  parse3.isAlpha = function isAlpha(c, cPrev, cNext) {
+    return parse3.isValidLatinOrGreek(c) || parse3.isValidMathSymbol(c, cNext) || parse3.isValidMathSymbol(cPrev, c);
   };
-  parse2.isValidLatinOrGreek = function isValidLatinOrGreek(c) {
+  parse3.isValidLatinOrGreek = function isValidLatinOrGreek(c) {
     return /^[a-zA-Z_$\u00C0-\u02AF\u0370-\u03FF\u2100-\u214F]$/.test(c);
   };
-  parse2.isValidMathSymbol = function isValidMathSymbol(high, low) {
+  parse3.isValidMathSymbol = function isValidMathSymbol(high, low) {
     return /^[\uD835]$/.test(high) && /^[\uDC00-\uDFFF]$/.test(low) && /^[^\uDC55\uDC9D\uDCA0\uDCA1\uDCA3\uDCA4\uDCA7\uDCA8\uDCAD\uDCBA\uDCBC\uDCC4\uDD06\uDD0B\uDD0C\uDD15\uDD1D\uDD3A\uDD3F\uDD45\uDD47-\uDD49\uDD51\uDEA6\uDEA7\uDFCC\uDFCD]$/.test(low);
   };
-  parse2.isWhitespace = function isWhitespace(c, nestingLevel) {
+  parse3.isWhitespace = function isWhitespace(c, nestingLevel) {
     return c === " " || c === "	" || c === "\n" && nestingLevel > 0;
   };
-  parse2.isDecimalMark = function isDecimalMark(c, cNext) {
+  parse3.isDecimalMark = function isDecimalMark(c, cNext) {
     return c === "." && cNext !== "/" && cNext !== "*" && cNext !== "^";
   };
-  parse2.isDigitDot = function isDigitDot(c) {
+  parse3.isDigitDot = function isDigitDot(c) {
     return c >= "0" && c <= "9" || c === ".";
   };
-  parse2.isDigit = function isDigit(c) {
+  parse3.isDigit = function isDigit(c) {
     return c >= "0" && c <= "9";
   };
-  parse2.isHexDigit = function isHexDigit(c) {
+  parse3.isHexDigit = function isHexDigit(c) {
     return c >= "0" && c <= "9" || c >= "a" && c <= "f" || c >= "A" && c <= "F";
   };
   function parseStart(expression, extraNodes) {
@@ -27820,7 +27809,7 @@ var createParse = /* @__PURE__ */ factory(name214, dependencies215, (_ref) => {
     error.char = c;
     return error;
   }
-  return parse2;
+  return parse3;
 });
 
 // node_modules/mathjs/lib/esm/expression/function/compile.js
@@ -27829,15 +27818,15 @@ var dependencies216 = ["typed", "parse"];
 var createCompile = /* @__PURE__ */ factory(name215, dependencies216, (_ref) => {
   var {
     typed: typed2,
-    parse: parse2
+    parse: parse3
   } = _ref;
   return typed2(name215, {
     string: function string3(expr) {
-      return parse2(expr).compile();
+      return parse3(expr).compile();
     },
     "Array | Matrix": function ArrayMatrix(expr) {
       return deepMap(expr, function(entry) {
-        return parse2(entry).compile();
+        return parse3(entry).compile();
       });
     }
   });
@@ -27849,25 +27838,25 @@ var dependencies217 = ["typed", "parse"];
 var createEvaluate = /* @__PURE__ */ factory(name216, dependencies217, (_ref) => {
   var {
     typed: typed2,
-    parse: parse2
+    parse: parse3
   } = _ref;
   return typed2(name216, {
     string: function string3(expr) {
       var scope = createEmptyMap();
-      return parse2(expr).compile().evaluate(scope);
+      return parse3(expr).compile().evaluate(scope);
     },
     "string, Map | Object": function stringMapObject(expr, scope) {
-      return parse2(expr).compile().evaluate(scope);
+      return parse3(expr).compile().evaluate(scope);
     },
     "Array | Matrix": function ArrayMatrix(expr) {
       var scope = createEmptyMap();
       return deepMap(expr, function(entry) {
-        return parse2(entry).compile().evaluate(scope);
+        return parse3(entry).compile().evaluate(scope);
       });
     },
     "Array | Matrix, Map | Object": function ArrayMatrixMapObject(expr, scope) {
       return deepMap(expr, function(entry) {
-        return parse2(entry).compile().evaluate(scope);
+        return parse3(entry).compile().evaluate(scope);
       });
     }
   });
@@ -28482,7 +28471,7 @@ var createCsAmd = /* @__PURE__ */ factory(name221, dependencies222, (_ref) => {
     var cindex = cm._index;
     var cptr = cm._ptr;
     var cnz = cptr[n];
-    var P3 = [];
+    var P4 = [];
     var W = [];
     var len = 0;
     var nv = n + 1;
@@ -28492,7 +28481,7 @@ var createCsAmd = /* @__PURE__ */ factory(name221, dependencies222, (_ref) => {
     var degree = 5 * (n + 1);
     var w = 6 * (n + 1);
     var hhead = 7 * (n + 1);
-    var last = P3;
+    var last = P4;
     var mark = _initializeQuotientGraph(n, cptr, W, len, head, last, next, hhead, nv, w, elen, degree);
     var nel = _initializeDegreeLists(n, cptr, W, degree, elen, w, dense, nv, head, last, next);
     var mindeg = 0;
@@ -28711,11 +28700,11 @@ var createCsAmd = /* @__PURE__ */ factory(name221, dependencies222, (_ref) => {
     }
     for (k = 0, i2 = 0; i2 <= n; i2++) {
       if (cptr[i2] === -1) {
-        k = csTdfs(i2, k, W, head, next, P3, w);
+        k = csTdfs(i2, k, W, head, next, P4, w);
       }
     }
-    P3.splice(P3.length - 1, 1);
-    return P3;
+    P4.splice(P4.length - 1, 1);
+    return P4;
   };
   function _createTargetMatrix(order, a, m, n, dense) {
     var at = transpose2(a);
@@ -29409,7 +29398,7 @@ var name228 = "Help";
 var dependencies229 = ["parse"];
 var createHelpClass = /* @__PURE__ */ factory(name228, dependencies229, (_ref) => {
   var {
-    parse: parse2
+    parse: parse3
   } = _ref;
   function Help2(doc) {
     if (!(this instanceof Help2)) {
@@ -29444,7 +29433,7 @@ var createHelpClass = /* @__PURE__ */ factory(name228, dependencies229, (_ref) =
         desc += "    " + expr + "\n";
         var res = void 0;
         try {
-          res = parse2(expr).compile().evaluate(scope);
+          res = parse3(expr).compile().evaluate(scope);
         } catch (e3) {
           res = e3;
         }
@@ -32342,13 +32331,13 @@ var createDet = /* @__PURE__ */ factory(name232, dependencies233, (_ref) => {
         if (i2 >= rows)
           break;
         var j = i2;
-        var cycleLen = 0;
+        var cycleLen2 = 0;
         while (!visited[decomp.p[j]]) {
           visited[decomp.p[j]] = true;
           j = decomp.p[j];
-          cycleLen++;
+          cycleLen2++;
         }
-        if (cycleLen % 2 === 0) {
+        if (cycleLen2 % 2 === 0) {
           evenCycles++;
         }
       }
@@ -35533,7 +35522,7 @@ var name264 = "resolve";
 var dependencies265 = ["parse", "FunctionNode", "OperatorNode", "ParenthesisNode"];
 var createResolve = /* @__PURE__ */ factory(name264, dependencies265, (_ref) => {
   var {
-    parse: parse2,
+    parse: parse3,
     FunctionNode: FunctionNode2,
     OperatorNode: OperatorNode2,
     ParenthesisNode: ParenthesisNode2
@@ -35550,7 +35539,7 @@ var createResolve = /* @__PURE__ */ factory(name264, dependencies265, (_ref) => 
       if (isNode(value)) {
         return resolve(value, scope);
       } else if (typeof value === "number") {
-        return parse2(String(value));
+        return parse3(String(value));
       }
     } else if (isOperatorNode(node)) {
       var args = node.args.map(function(arg2) {
@@ -35577,7 +35566,7 @@ var createSimplify = /* @__PURE__ */ factory(name265, dependencies266, (_ref) =>
   var {
     config: config4,
     typed: typed2,
-    parse: parse2,
+    parse: parse3,
     add: add4,
     subtract: subtract2,
     multiply: multiply3,
@@ -35619,7 +35608,7 @@ var createSimplify = /* @__PURE__ */ factory(name265, dependencies266, (_ref) =>
     ParenthesisNode: ParenthesisNode2
   });
   var resolve = createResolve({
-    parse: parse2,
+    parse: parse3,
     FunctionNode: FunctionNode2,
     OperatorNode: OperatorNode2,
     ParenthesisNode: ParenthesisNode2
@@ -35638,22 +35627,22 @@ var createSimplify = /* @__PURE__ */ factory(name265, dependencies266, (_ref) =>
   });
   var simplify2 = typed2("simplify", {
     string: function string3(expr) {
-      return this(parse2(expr), this.rules, createEmptyMap(), {});
+      return this(parse3(expr), this.rules, createEmptyMap(), {});
     },
     "string, Map | Object": function stringMapObject(expr, scope) {
-      return this(parse2(expr), this.rules, scope, {});
+      return this(parse3(expr), this.rules, scope, {});
     },
     "string, Map | Object, Object": function stringMapObjectObject(expr, scope, options) {
-      return this(parse2(expr), this.rules, scope, options);
+      return this(parse3(expr), this.rules, scope, options);
     },
     "string, Array": function stringArray(expr, rules) {
-      return this(parse2(expr), rules, createEmptyMap(), {});
+      return this(parse3(expr), rules, createEmptyMap(), {});
     },
     "string, Array, Map | Object": function stringArrayMapObject(expr, rules, scope) {
-      return this(parse2(expr), rules, scope, {});
+      return this(parse3(expr), rules, scope, {});
     },
     "string, Array, Map | Object, Object": function stringArrayMapObjectObject(expr, rules, scope, options) {
-      return this(parse2(expr), rules, scope, options);
+      return this(parse3(expr), rules, scope, options);
     },
     "Node, Map | Object": function NodeMapObject(expr, scope) {
       return this(expr, this.rules, scope, {});
@@ -35862,14 +35851,14 @@ var createSimplify = /* @__PURE__ */ factory(name265, dependencies266, (_ref) =>
         }
         case "object":
           newRule = {
-            l: removeParens(parse2(rule.l)),
-            r: removeParens(parse2(rule.r))
+            l: removeParens(parse3(rule.l)),
+            r: removeParens(parse3(rule.r))
           };
           if (rule.context) {
             newRule.evaluate = rule.context;
           }
           if (rule.evaluate) {
-            newRule.evaluate = parse2(rule.evaluate);
+            newRule.evaluate = parse3(rule.evaluate);
           }
           if (isAssociative(newRule.l)) {
             var makeNode = createMakeNodeFunction(newRule.l);
@@ -36123,7 +36112,7 @@ var createDerivative = /* @__PURE__ */ factory(name266, dependencies267, (_ref) 
   var {
     typed: typed2,
     config: config4,
-    parse: parse2,
+    parse: parse3,
     simplify: simplify2,
     equal: equal2,
     isZero: isZero2,
@@ -36147,22 +36136,22 @@ var createDerivative = /* @__PURE__ */ factory(name266, dependencies267, (_ref) 
       });
     },
     "string, SymbolNode": function stringSymbolNode(expr, variable) {
-      return this(parse2(expr), variable);
+      return this(parse3(expr), variable);
     },
     "string, SymbolNode, Object": function stringSymbolNodeObject(expr, variable, options) {
-      return this(parse2(expr), variable, options);
+      return this(parse3(expr), variable, options);
     },
     "string, string": function stringString(expr, variable) {
-      return this(parse2(expr), parse2(variable));
+      return this(parse3(expr), parse3(variable));
     },
     "string, string, Object": function stringStringObject(expr, variable, options) {
-      return this(parse2(expr), parse2(variable), options);
+      return this(parse3(expr), parse3(variable), options);
     },
     "Node, string": function NodeString(expr, variable) {
-      return this(expr, parse2(variable));
+      return this(expr, parse3(variable));
     },
     "Node, string, Object": function NodeStringObject(expr, variable, options) {
-      return this(expr, parse2(variable), options);
+      return this(expr, parse3(variable), options);
     }
   });
   derivative2._simplify = true;
@@ -36172,14 +36161,14 @@ var createDerivative = /* @__PURE__ */ factory(name266, dependencies267, (_ref) 
   var _derivTex = typed2("_derivTex", {
     "Node, SymbolNode": function NodeSymbolNode(expr, x) {
       if (isConstantNode(expr) && typeOf(expr.value) === "string") {
-        return _derivTex(parse2(expr.value).toString(), x.toString(), 1);
+        return _derivTex(parse3(expr.value).toString(), x.toString(), 1);
       } else {
         return _derivTex(expr.toString(), x.toString(), 1);
       }
     },
     "Node, ConstantNode": function NodeConstantNode(expr, x) {
       if (typeOf(x.value) === "string") {
-        return _derivTex(expr, parse2(x.value));
+        return _derivTex(expr, parse3(x.value));
       } else {
         throw new Error("The second parameter to 'derivative' is a non-string constant");
       }
@@ -36517,7 +36506,7 @@ var createRationalize = /* @__PURE__ */ factory(name267, dependencies268, (_ref)
     multiply: multiply3,
     divide: divide3,
     pow: pow3,
-    parse: parse2,
+    parse: parse3,
     simplify: simplify2,
     fraction: fraction2,
     bignumber: bignumber2,
@@ -36554,16 +36543,16 @@ var createRationalize = /* @__PURE__ */ factory(name267, dependencies268, (_ref)
   });
   return typed2(name267, {
     string: function string3(expr) {
-      return this(parse2(expr), {}, false);
+      return this(parse3(expr), {}, false);
     },
     "string, boolean": function stringBoolean(expr, detailed) {
-      return this(parse2(expr), {}, detailed);
+      return this(parse3(expr), {}, detailed);
     },
     "string, Object": function stringObject(expr, scope) {
-      return this(parse2(expr), scope, false);
+      return this(parse3(expr), scope, false);
     },
     "string, Object, boolean": function stringObjectBoolean(expr, scope, detailed) {
-      return this(parse2(expr), scope, detailed);
+      return this(parse3(expr), scope, detailed);
     },
     Node: function Node2(expr) {
       return this(expr, {}, false);
@@ -38287,7 +38276,7 @@ var matrix = /* @__PURE__ */ createMatrix({
 var abs2 = /* @__PURE__ */ createAbs({
   typed
 });
-var gcd = /* @__PURE__ */ createGcd({
+var gcd2 = /* @__PURE__ */ createGcd({
   BigNumber,
   DenseMatrix,
   equalScalar,
@@ -39558,7 +39547,7 @@ var FunctionNode = createFunctionNode({
   SymbolNode,
   math
 });
-var parse = createParse({
+var parse2 = createParse({
   AccessorNode,
   ArrayNode,
   AssignmentNode,
@@ -39579,11 +39568,11 @@ var parse = createParse({
   typed
 });
 var evaluate = createEvaluate({
-  parse,
+  parse: parse2,
   typed
 });
 var Help = createHelpClass({
-  parse
+  parse: parse2
 });
 var simplify = createSimplify({
   bignumber,
@@ -39600,7 +39589,7 @@ var simplify = createSimplify({
   isZero,
   mathWithTransform,
   multiply,
-  parse,
+  parse: parse2,
   pow: pow2,
   subtract,
   typed
@@ -39620,7 +39609,7 @@ var rationalize = createRationalize({
   isZero,
   mathWithTransform,
   multiply,
-  parse,
+  parse: parse2,
   pow: pow2,
   simplify,
   subtract,
@@ -39644,7 +39633,7 @@ var derivative = createDerivative({
   equal,
   isZero,
   numeric: numeric2,
-  parse,
+  parse: parse2,
   simplify,
   typed
 });
@@ -39653,7 +39642,7 @@ var parser = createParser({
   typed
 });
 var compile = createCompile({
-  parse,
+  parse: parse2,
   typed
 });
 _extends(math, {
@@ -39754,7 +39743,7 @@ _extends(math, {
   isNegative,
   matrix,
   abs: abs2,
-  gcd,
+  gcd: gcd2,
   mod: mod2,
   nthRoot,
   xgcd,
@@ -39917,7 +39906,7 @@ _extends(math, {
   speedOfLight,
   wienDisplacement,
   unit,
-  parse,
+  parse: parse2,
   evaluate,
   intersect,
   simplify,
@@ -44589,10 +44578,10 @@ var SoloSettingTab = class extends import_obsidian8.PluginSettingTab {
  * Dual licensed under the MIT or GPL Version 2 licenses.
  **/
 /**
- * @license Fraction.js v4.2.0 05/03/2022
+ * @license Fraction.js v4.3.7 31/08/2023
  * https://www.xarg.org/2014/03/rational-numbers-in-javascript/
  *
- * Copyright (c) 2021, Robert Eisele (robert@xarg.org)
+ * Copyright (c) 2023, Robert Eisele (robert@raw.org)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  **/
 /**
