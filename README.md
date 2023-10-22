@@ -88,12 +88,12 @@ ARG=$1
 
 npm run build
 
-if [ $ARG = 'prod' ];
+if [[ $ARG = 'prod' ]];
 then
-    cp ./build/* PathToYourRealVault/.obsidian/plugins/napoleon
+    cp ./build/* ~/Obsidian\ Vaults/Solo/SOLO/.obsidian/plugins/napoleon
     echo "PROD BUILD COMPLETE"
 else
-    cp ./build/* PathToYourDevVault/.obsidian/plugins/napoleon
+    cp ./build/* ~/Library/CloudStorage/Dropbox/Obsidian\ Files/Plugin\ Dev/Plugin\ Dev/.obsidian/plugins/napoleon
     echo "DEV BUILD COMPLETE"
 fi
 ```
