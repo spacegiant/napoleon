@@ -8,7 +8,7 @@ package-lock.json
 
 # build
 *.js.map
-build
+build/main.js
 
 # obsidian
 data.json
@@ -18,6 +18,5 @@ src/mythic/data
 
 # and
 .DS_Store
-move.sh
 .env
-copy.sh
+build.sh
