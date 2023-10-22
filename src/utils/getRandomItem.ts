@@ -11,12 +11,13 @@ const getRandomItem: (
   file: any,
   cb: (value: string) => void
 ) => {
-  console.log(file.frontmatter.tags);
   const tags: string[] = file.frontmatter.tags;
   if (tags.includes('solo/list')) {
-    getRandomListItem(app, file, cb);
+    // TODO: Is void valid here?
+    void getRandomListItem(app, file, cb);
   } else if(tags.includes('solo/weighted')) {
-    getRandomWeightedListItem(app, file, cb);
+    // TODO: Is void valid here?
+    void getRandomWeightedListItem(app, file, cb);
   }
 };
 

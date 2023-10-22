@@ -2,6 +2,11 @@ import { MarkdownView, type App } from 'obsidian';
 // https://github.com/GreenImp/rpg-dice-roller
 import { DiceRoll } from 'rpg-dice-roller';
 
+/**
+ * Watches for a command string and then a TAB key interaction
+ * then replaces the contents at the cursor position.
+ */
+
 const Replacer = (app: App): void => {
   const view = app.workspace.getActiveViewOfType(MarkdownView);
 
