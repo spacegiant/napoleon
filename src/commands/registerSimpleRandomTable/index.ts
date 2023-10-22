@@ -2,7 +2,7 @@ import { type App, MarkdownView } from 'obsidian';
 import getRandomItem from 'src/utils/getRandomItem';
 
 // TODO: Fix table: any
-const registerSimpleRandomTable = (app: App, table: any) => {
+const randomTableCallback = (app: App, table: any) => {
   return (checking: boolean) => {
     const leaf = app.workspace.getActiveViewOfType(MarkdownView);
     if (leaf) {
@@ -16,6 +16,8 @@ const registerSimpleRandomTable = (app: App, table: any) => {
           const editor = view.editor;
           const doc = editor.getDoc();
           const cursor = doc.getCursor();
+
+          // FIXME
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           getRandomItem(app, table, (content: string) => {
             const string = content;
@@ -31,4 +33,4 @@ const registerSimpleRandomTable = (app: App, table: any) => {
   };
 };
 
-export default registerSimpleRandomTable;
+export default randomTableCallback;

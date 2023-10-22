@@ -6,11 +6,10 @@ import {
   openHomePage,
   insertD,
   insertTab,
-  registerSimpleRandomTable,
-  registerWeightedRandomTable,
+  randomTableCallback
 } from './src/commands';
 
-import { MyPluginSettings } from 'src/types';
+import type { MyPluginSettings } from 'src/types';
 import { DEFAULT_SETTINGS } from 'src/constants';
 
 export default class MyPlugin extends Plugin {
@@ -46,29 +45,27 @@ export default class MyPlugin extends Plugin {
         icon: 'dice',
         checkCallback: insertTab(this.app),
       });
+      // TODO:  Can we get the current folder?
+
+      // REGISTER RANDOM TABLES WITH CALLBACK
+
+
 
       // CREATE RANDOM TABLES
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
-      taggedFiles?.simpleList.forEach((table: any, index) => {
+
+      taggedFiles?.forEach((table: any, index) => {
         const tableBasename = table?.basename;
         if (typeof tableBasename !== 'string') return;
         this.addCommand({
           id: `command-${tableBasename}`,
           name: table?.basename,
-          checkCallback: registerSimpleRandomTable(this.app, table),
+          checkCallback: randomTableCallback(this.app, table),
         });
       });
 
-      taggedFiles?.weightedTables.forEach((table: any, index) => {
-        const tableBasename = table?.basename;
-        if (typeof tableBasename !== 'string') return;
-        this.addCommand({
-          id: `command-${tableBasename}`,
-          name: table?.basename,
-          checkCallback: registerWeightedRandomTable(app, table),
-        });
-      });
+      
 
       // TODO: Implement decks feature
       // taggedFiles.decks.forEach((table: any, index) => { });

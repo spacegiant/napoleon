@@ -1,39 +1,44 @@
-import type { App } from 'obsidian';
+import type { App, CachedMetadata } from 'obsidian';
 import type { TaggedFilesCollection } from 'src/types';
 
-interface TaggedFiles {
-  simpleList: TaggedFilesCollection;
-  weightedTables: TaggedFilesCollection;
-  config: TaggedFilesCollection;
-}
-
-function getTaggedFiles(app: App): TaggedFiles | undefined {
+function getTaggedFiles(app: App): TaggedFilesCollection | undefined {
   const metadataCache = app.metadataCache;
   const markdownFiles = app.vault.getMarkdownFiles();
-  const simpleList: TaggedFilesCollection = [];
-  const weightedTables: TaggedFilesCollection = [];
-  const config: TaggedFilesCollection = [];
+  const randomTables: TaggedFilesCollection = [];
 
   for (const markdownFile of markdownFiles) {
-    const cachedMetadata = metadataCache.getFileCache(markdownFile);
+    const cachedMetadata: CachedMetadata | null = metadataCache.getFileCache(markdownFile);
     // if (cachedMetadata?.frontmatter?.tags == null) return;
 
-    const tags = cachedMetadata?.frontmatter?.tags;
+    const tags: string[] = cachedMetadata?.frontmatter?.tags;
 
-    if (tags?.includes('solo/list')) {
-      simpleList.push(Object.assign({}, markdownFile, cachedMetadata));
-    } else if (tags?.includes('solo/weighted')) {
-      weightedTables.push(Object.assign({}, markdownFile, cachedMetadata));
-    } else if (tags?.includes('solo/config')) {
-      config.push(markdownFile);
+    // TODO: Add this to settings
+    const randomTableTag = "solo";
+
+    const isRandomTableTag = (tag: string, randomTableTag: string): boolean => {
+      return tag.split("/")[0] === randomTableTag;
+    };
+
+    const isRandomTable = (tag: string | string[]): boolean | undefined => {
+      if (typeof tags === 'string') {
+        return isRandomTableTag(tags, randomTableTag);
+       } else if (Array.isArray(tags)) {
+        return tags.filter(tag => isRandomTableTag(tag, randomTableTag)).length > 0;
+       }
     }
+
+    isRandomTable(tags) && randomTables.push(Object.assign({}, markdownFile, cachedMetadata))
+
+
+    
+ 
+
+
+
   }
 
-  return {
-    simpleList,
-    weightedTables,
-    config,
-  };
+  return randomTables;
+
 }
 
 export default getTaggedFiles;
