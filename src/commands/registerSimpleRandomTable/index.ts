@@ -7,7 +7,6 @@ const registerSimpleRandomTable = (app: App, table: any) => {
     const leaf = app.workspace.getActiveViewOfType(MarkdownView);
     if (leaf) {
       if (!checking) {
-        console.log('simple');
         const mode = leaf.getState().mode;
         const isEditing = mode === 'source';
 
@@ -19,7 +18,6 @@ const registerSimpleRandomTable = (app: App, table: any) => {
           const cursor = doc.getCursor();
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
           getRandomListItem(app, table, (content: string) => {
-            console.log(content);
             const string = content;
             doc.replaceRange(string, cursor);
             doc.focus();
