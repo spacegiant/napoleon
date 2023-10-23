@@ -1,4 +1,4 @@
-import { MyPluginSettings } from "./types";
+import type { MyPluginSettings } from "./types";
 
 export const DEFAULT_SETTINGS: MyPluginSettings = {
     mySetting: 'default',
@@ -6,4 +6,5 @@ export const DEFAULT_SETTINGS: MyPluginSettings = {
     tacOn: false,
     replacer: false,
     replacerSuffix: '//',
+    randomTableTag: 'random-table'
   };

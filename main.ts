@@ -6,7 +6,7 @@ import {
   openHomePage,
   insertD,
   insertTab,
-  randomTableCallback
+  randomTableCallback,
 } from './src/commands';
 
 import type { MyPluginSettings } from 'src/types';
@@ -49,8 +49,6 @@ export default class MyPlugin extends Plugin {
 
       // REGISTER RANDOM TABLES WITH CALLBACK
 
-
-
       // CREATE RANDOM TABLES
       // get all files with tags
       taggedFiles = getTaggedFiles(this.app);
@@ -64,8 +62,6 @@ export default class MyPlugin extends Plugin {
           checkCallback: randomTableCallback(this.app, table),
         });
       });
-
-      
 
       // TODO: Implement decks feature
       // taggedFiles.decks.forEach((table: any, index) => { });
@@ -113,6 +109,18 @@ class SoloSettingTab extends PluginSettingTab {
     containerEl.empty();
 
     containerEl.createEl('h2', { text: 'Napoleon Settings' });
+
+    new Setting(containerEl)
+      .setName('General')
+      .setDesc('Random table tag')
+      .addText((text) =>
+        text
+          .setValue(this.plugin.settings.randomTableTag)
+          .onChange(async (value) => {
+            this.plugin.settings.randomTableTag = value;
+            await this.plugin.saveSettings();
+          })
+      );
 
     new Setting(containerEl)
       .setName('Mythic')

@@ -10,4 +10,5 @@ export interface MyPluginSettings {
     tacOn: boolean;
     replacer: boolean;
     replacerSuffix: string;
+    randomTableTag: string;
   }
