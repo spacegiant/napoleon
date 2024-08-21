@@ -69,7 +69,8 @@ Limitations: Currently does not handle spaces in dice notation e.g use {2d6,2d10
 
 ## Manually installing the plugin
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/napoleon/`.
+- If you just want to test the plugin, download 'build.zip' and put the unzipped files in `VaultFolder/.obsidian/plugins/napoleon/`
+- If you clone the repo then copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/napoleon/`.
 
 ### Development links
 
