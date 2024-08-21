@@ -1,7 +1,7 @@
 import openHomePage from "./openHomePage";
 import insertD from "./insertD";
 import insertTab from "./insertTab";
-import randomTableCallback from "./registerSimpleRandomTable";
+import randomTableCallback from "./randomTableCallback";
 import registerWeightedRandomTable from "./registerWeightedRandomTable";
 
 export {

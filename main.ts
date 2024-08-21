@@ -111,7 +111,19 @@ class SoloSettingTab extends PluginSettingTab {
     containerEl.createEl('h2', { text: 'Napoleon Settings' });
 
     new Setting(containerEl)
-      .setName('General')
+      .setName('Random Table Notes')
+      .setDesc('Use random tables notes?')
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.randomTablesActive)
+          .onChange(async () => {
+            this.plugin.settings.randomTablesActive =
+              !this.plugin.settings.randomTablesActive;
+          })
+      );
+
+    new Setting(containerEl)
+      .setName('Random Tables')
       .setDesc('Random table tag')
       .addText((text) =>
         text

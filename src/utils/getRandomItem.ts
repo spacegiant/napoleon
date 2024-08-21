@@ -1,6 +1,7 @@
 import type { App } from 'obsidian';
 import getRandomListItem from './getRandomListItem';
 import getRandomWeightedListItem from './getRandomWeightedListItem';
+import handleTemplate from './handleTemplate';
 
 const getRandomItem: (
   app: App,
@@ -12,12 +13,15 @@ const getRandomItem: (
   cb: (value: string) => void
 ) => {
   const tags: string[] = file.frontmatter.tags;
+
   if (tags.includes('solo/list')) {
     // TODO: Is void valid here?
     void getRandomListItem(app, file, cb);
-  } else if(tags.includes('solo/weighted')) {
+  } else if (tags.includes('solo/weighted')) {
     // TODO: Is void valid here?
     void getRandomWeightedListItem(app, file, cb);
+  } else if (tags.includes('solo/template')) {
+    void handleTemplate(app, file, cb);
   }
 };
 

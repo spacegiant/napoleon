@@ -21,6 +21,9 @@ const Replacer = (app: App): void => {
   const cleanedLine = currentLine.replace(/\s+/g, ' ').trim();
   const stringList = cleanedLine.split(' ');
   const lastString = stringList[stringList.length - 1];
+
+  // TODO: Can this be hooked in to 3d dice roller?
+  // See: https://github.com/javalent/dice-roller#usage-in-other-plugins
   const roll = new DiceRoll(lastString.toLowerCase());
   stringList[stringList.length - 1] = roll.output;
   const returnString = stringList.join(' ');
