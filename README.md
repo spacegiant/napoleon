@@ -16,6 +16,16 @@ WIP!!!
 
 ![Preview of creating a simple list](https://github.com/spacegiant/napoleon/blob/main/dice-roller.gif)
 
+
+### Toolbar buttons for mobile
+
+There are a couple of toolbar buttons that you need to manually add to your toolbar to help with dice rolling etc.
+
+In the screen capture below I have a `D` icon and dice icon. To write `2d6` and roll it I type `2`, press the D icon, `3`, then press the dice button.
+
+
+<img src="https://github.com/spacegiant/napoleon/blob/main/toolbar-buttons.gif" width="400px" />
+
 ## Simple random item
 
 Paste a random line from a markdown file at your cursor.
