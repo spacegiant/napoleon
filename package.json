@@ -9,7 +9,8 @@
     "zip": "rm -f build.zip && zip -r build.zip build",
     "version": "node version-bump.mjs && git add manifest.json versions.json",
     "eslint": "npx eslint 'src/**'",
-    "eslint:fix": "npx eslint 'src/**' --fix"
+    "eslint:fix": "npx eslint 'src/**' --fix",
+    "move": "cp build/main.js '/Users/craig/Library/CloudStorage/Dropbox/Obsidian Files/Plugin Dev/Plugin Dev/.obsidian/plugins/napoleon/'"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +32,6 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "rpg-dice-roller": "^5.0.0"
+    "@dice-roller/rpg-dice-roller": "^5.5.0"
   }
 }
