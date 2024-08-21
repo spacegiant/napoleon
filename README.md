@@ -14,6 +14,8 @@ WIP!!!
 
 ### Roll dice inline
 
+For dice notation see: [https://dice-roller.github.io/documentation/guide/](https://dice-roller.github.io/documentation/guide/)
+
 ![Preview of creating a simple list](https://github.com/spacegiant/napoleon/blob/main/dice-roller.gif)
 
 
