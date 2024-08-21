@@ -2,6 +2,20 @@
 
 WIP!!!
 
+## Previews
+
+### Create a simple list
+
+![Preview of creating a simple list](https://github.com/spacegiant/napoleon/blob/main/siimple-list.gif)
+
+### Create a weighted list
+
+![Preview of creating a simple list](https://github.com/spacegiant/napoleon/blob/main/weighted-list.gif)
+
+### Roll dice inline
+
+![Preview of creating a simple list](https://github.com/spacegiant/napoleon/blob/main/dice-roller.gif)
+
 ## Simple random item
 
 Paste a random line from a markdown file at your cursor.
